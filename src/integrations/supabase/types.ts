@@ -14,7 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      shifts: {
+        Row: {
+          created_at: string
+          dispatcher: string
+          end_time: string | null
+          final_balance: number
+          id: string
+          initial_balance: number
+          start_time: string
+        }
+        Insert: {
+          created_at?: string
+          dispatcher: string
+          end_time?: string | null
+          final_balance?: number
+          id: string
+          initial_balance?: number
+          start_time?: string
+        }
+        Update: {
+          created_at?: string
+          dispatcher?: string
+          end_time?: string | null
+          final_balance?: number
+          id?: string
+          initial_balance?: number
+          start_time?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string
+          dispatcher: string
+          id: string
+          shift_id: string
+          timestamp: string
+          type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description: string
+          dispatcher: string
+          id: string
+          shift_id: string
+          timestamp?: string
+          type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string
+          dispatcher?: string
+          id?: string
+          shift_id?: string
+          timestamp?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
