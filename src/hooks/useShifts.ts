@@ -46,7 +46,7 @@ export const useShifts = () => {
   const loadShifts = async () => {
     try {
       // Încarcă toate turele cu tranzacțiile lor
-      const { data: shiftsData, error: shiftsError } = await supabase
+      const { data: shiftsData, error: shiftsError } = await (supabase as any)
         .from('shifts')
         .select(`
           *,
@@ -91,7 +91,7 @@ export const useShifts = () => {
 
   const createShift = async (shift: Shift) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('shifts')
         .insert({
           id: shift.id,
@@ -114,7 +114,7 @@ export const useShifts = () => {
       if (updates.finalBalance !== undefined) dbUpdates.final_balance = updates.finalBalance;
       if (updates.endTime !== undefined) dbUpdates.end_time = updates.endTime;
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('shifts')
         .update(dbUpdates)
         .eq('id', shiftId);
@@ -128,7 +128,7 @@ export const useShifts = () => {
 
   const addTransaction = async (shiftId: string, transaction: any) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('transactions')
         .insert({
           id: transaction.id,
