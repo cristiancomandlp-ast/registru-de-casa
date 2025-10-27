@@ -108,7 +108,7 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Dispecerat Taxi</CardTitle>
+          <CardTitle className="text-2xl text-center">Registru de casa</CardTitle>
           <CardDescription className="text-center">
             Autentifică-te pentru a accesa aplicația
           </CardDescription>
