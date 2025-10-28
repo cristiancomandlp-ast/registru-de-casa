@@ -14,7 +14,7 @@ const Dashboard = () => {
   const { signOut } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <div className="container max-w-4xl mx-auto p-4 md:p-6">
         <div className="mb-6 flex flex-col gap-4">
           <img 
@@ -48,10 +48,25 @@ const Dashboard = () => {
           <Settings />
         ) : (
           <Tabs defaultValue="panou" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6">
-              <TabsTrigger value="panou">Panou Dispecer</TabsTrigger>
-              <TabsTrigger value="istoric">Istoric</TabsTrigger>
-              <TabsTrigger value="rapoarte">Rapoarte</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 mb-6 h-12 bg-gray-100 border border-gray-300">
+              <TabsTrigger 
+                value="panou"
+                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
+              >
+                Panou Dispecer
+              </TabsTrigger>
+              <TabsTrigger 
+                value="istoric"
+                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
+              >
+                Istoric
+              </TabsTrigger>
+              <TabsTrigger 
+                value="rapoarte"
+                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
+              >
+                Rapoarte
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="panou" className="mt-0">

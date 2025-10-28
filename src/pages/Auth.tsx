@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import pelicanulLogo from '@/assets/pelicanul-logo.jpg';
 
 const authSchema = z.object({
   email: z.string().email('Email invalid'),
@@ -105,11 +106,16 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Registru de casa</CardTitle>
-          <CardDescription className="text-center">
+    <div className="min-h-screen flex items-center justify-center bg-white p-4">
+      <Card className="w-full max-w-xl">
+        <CardHeader className="space-y-4">
+          <img 
+            src={pelicanulLogo} 
+            alt="Pelicanul Taxi Logo" 
+            className="w-72 mx-auto"
+          />
+          <CardTitle className="text-2xl text-center text-gray-900">Registru de casa</CardTitle>
+          <CardDescription className="text-center text-gray-600">
             Autentifică-te pentru a accesa aplicația
           </CardDescription>
         </CardHeader>
