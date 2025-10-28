@@ -4,6 +4,8 @@ import { DispatcherPanel } from '@/components/DispatcherPanel';
 import { History } from '@/components/History';
 import { ReportsDb } from '@/components/ReportsDb';
 import { Settings } from '@/components/Settings';
+import { Pontaj } from '@/components/Pontaj';
+import { Necesar } from '@/components/Necesar';
 import { Settings as SettingsIcon, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,9 +24,7 @@ const Dashboard = () => {
             alt="Pelicanul Taxi Logo" 
             className="w-64 mx-auto"
           />
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-foreground">Registru de casa</h1>
-            <div className="flex gap-2">
+          <div className="flex justify-end items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
@@ -40,7 +40,6 @@ const Dashboard = () => {
             >
               <LogOut className="h-5 w-5" />
             </Button>
-            </div>
           </div>
         </div>
 
@@ -48,7 +47,7 @@ const Dashboard = () => {
           <Settings />
         ) : (
           <Tabs defaultValue="panou" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6 h-12 bg-gray-100 border border-gray-300">
+            <TabsList className="grid w-full grid-cols-5 mb-6 h-12 bg-gray-100 border border-gray-300">
               <TabsTrigger 
                 value="panou"
                 className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
@@ -67,6 +66,18 @@ const Dashboard = () => {
               >
                 Rapoarte
               </TabsTrigger>
+              <TabsTrigger 
+                value="pontaj"
+                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
+              >
+                Pontaj
+              </TabsTrigger>
+              <TabsTrigger 
+                value="necesar"
+                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
+              >
+                Necesar
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="panou" className="mt-0">
@@ -79,6 +90,14 @@ const Dashboard = () => {
 
             <TabsContent value="rapoarte" className="mt-0">
               <ReportsDb />
+            </TabsContent>
+
+            <TabsContent value="pontaj" className="mt-0">
+              <Pontaj />
+            </TabsContent>
+
+            <TabsContent value="necesar" className="mt-0">
+              <Necesar />
             </TabsContent>
           </Tabs>
         )}
