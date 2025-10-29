@@ -8,7 +8,7 @@ export const useAdmin = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAdminStatus = async () => {
+    const checkAdminRole = async () => {
       if (!user) {
         setIsAdmin(false);
         setLoading(false);
@@ -21,21 +21,23 @@ export const useAdmin = () => {
           .select('role')
           .eq('user_id', user.id)
           .eq('role', 'admin')
-          .single();
+          .maybeSingle();
 
         if (error) {
+          console.error('Error checking admin role:', error);
           setIsAdmin(false);
         } else {
           setIsAdmin(!!data);
         }
-      } catch (err) {
+      } catch (error) {
+        console.error('Error checking admin role:', error);
         setIsAdmin(false);
       } finally {
         setLoading(false);
       }
     };
 
-    checkAdminStatus();
+    checkAdminRole();
   }, [user]);
 
   return { isAdmin, loading };

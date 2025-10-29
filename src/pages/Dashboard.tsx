@@ -24,7 +24,8 @@ const Dashboard = () => {
             alt="Pelicanul Taxi Logo" 
             className="w-64 mx-auto"
           />
-          <div className="flex justify-end items-center gap-2">
+          <div className="flex justify-end items-center">
+            <div className="flex gap-2">
             <Button
               variant="ghost"
               size="icon"
@@ -40,6 +41,7 @@ const Dashboard = () => {
             >
               <LogOut className="h-5 w-5" />
             </Button>
+            </div>
           </div>
         </div>
 
