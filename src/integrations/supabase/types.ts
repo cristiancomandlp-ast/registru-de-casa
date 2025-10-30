@@ -48,28 +48,25 @@ export type Database = {
         Row: {
           created_at: string | null
           data: string
-          dispatcher: string
           id: string
-          observatii: string | null
-          ore_lucrate: number
+          tura_noapte: string | null
+          tura_zi: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           data: string
-          dispatcher: string
           id?: string
-          observatii?: string | null
-          ore_lucrate?: number
+          tura_noapte?: string | null
+          tura_zi?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           data?: string
-          dispatcher?: string
           id?: string
-          observatii?: string | null
-          ore_lucrate?: number
+          tura_noapte?: string | null
+          tura_zi?: string | null
           updated_at?: string | null
         }
         Relationships: []
