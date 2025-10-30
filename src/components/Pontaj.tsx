@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdmin } from '@/hooks/useAdmin';
 import { useToast } from '@/hooks/use-toast';
@@ -21,6 +23,13 @@ export const Pontaj = () => {
   const [pontaje, setPontaje] = useState<PontajEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [dispatcherColors, setDispatcherColors] = useState<Record<DispatcherName, string>>({
+    'Luiza': '#3b82f6',
+    'Laura': '#ec4899',
+    'Rely': '#10b981',
+    'Antigona': '#f59e0b',
+    'Memeta': '#8b5cf6'
+  });
 
   const dispatchers: DispatcherName[] = ['Luiza', 'Laura', 'Rely', 'Antigona', 'Memeta'];
 
@@ -177,6 +186,13 @@ export const Pontaj = () => {
 
   const weekDays = ['Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum'];
 
+  const handleColorChange = (dispatcher: DispatcherName, color: string) => {
+    setDispatcherColors(prev => ({
+      ...prev,
+      [dispatcher]: color
+    }));
+  };
+
   if (loading || adminLoading) {
     return <div className="text-center p-4">Se încarcă...</div>;
   }
@@ -218,7 +234,7 @@ export const Pontaj = () => {
             <div className="grid grid-cols-7 gap-2">
               {days.map((day, index) => {
                 if (day === null) {
-                  return <div key={`empty-${index}`} className="aspect-square" />;
+                  return <div key={`empty-${index}`} className="min-h-[140px]" />;
                 }
 
                 const dateStr = new Date(year, month, day).toISOString().split('T')[0];
@@ -226,23 +242,23 @@ export const Pontaj = () => {
                 const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
 
                 return (
-                  <Card key={day} className={`p-2 ${isToday ? 'ring-2 ring-primary' : ''}`}>
+                  <Card key={day} className={`p-2 min-h-[140px] ${isToday ? 'ring-2 ring-primary' : ''}`}>
                     <div className="space-y-2">
                       {/* Day number */}
-                      <div className={`text-center font-bold text-lg ${isToday ? 'text-primary' : ''}`}>
+                      <div className={`text-center font-bold text-sm ${isToday ? 'text-primary' : ''}`}>
                         {day}
                       </div>
 
                       {/* Tura Zi */}
                       <div className="space-y-1">
-                        <div className="text-xs font-medium text-muted-foreground">Zi</div>
+                        <div className="text-[10px] font-medium text-muted-foreground">Zi</div>
                         {isAdmin ? (
                           <Select
                             value={pontaj?.tura_zi || 'none'}
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_zi', value)}
                           >
-                            <SelectTrigger className="h-8 text-xs">
-                              <SelectValue placeholder="Selectează" />
+                            <SelectTrigger className="h-7 text-xs">
+                              <SelectValue placeholder="-" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="none">-</SelectItem>
@@ -252,7 +268,14 @@ export const Pontaj = () => {
                             </SelectContent>
                           </Select>
                         ) : (
-                          <div className="text-xs text-center py-1 px-2 bg-primary/10 rounded">
+                          <div 
+                            className="text-xs font-medium text-center py-1 px-1 rounded"
+                            style={{ 
+                              backgroundColor: pontaj?.tura_zi ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}20` : 'transparent',
+                              color: pontaj?.tura_zi ? dispatcherColors[pontaj.tura_zi as DispatcherName] : 'inherit',
+                              border: pontaj?.tura_zi ? `1px solid ${dispatcherColors[pontaj.tura_zi as DispatcherName]}40` : 'none'
+                            }}
+                          >
                             {pontaj?.tura_zi || '-'}
                           </div>
                         )}
@@ -260,14 +283,14 @@ export const Pontaj = () => {
 
                       {/* Tura Noapte */}
                       <div className="space-y-1">
-                        <div className="text-xs font-medium text-muted-foreground">Noapte</div>
+                        <div className="text-[10px] font-medium text-muted-foreground">Noapte</div>
                         {isAdmin ? (
                           <Select
                             value={pontaj?.tura_noapte || 'none'}
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_noapte', value)}
                           >
-                            <SelectTrigger className="h-8 text-xs">
-                              <SelectValue placeholder="Selectează" />
+                            <SelectTrigger className="h-7 text-xs">
+                              <SelectValue placeholder="-" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="none">-</SelectItem>
@@ -277,7 +300,14 @@ export const Pontaj = () => {
                             </SelectContent>
                           </Select>
                         ) : (
-                          <div className="text-xs text-center py-1 px-2 bg-secondary/10 rounded">
+                          <div 
+                            className="text-xs font-medium text-center py-1 px-1 rounded"
+                            style={{ 
+                              backgroundColor: pontaj?.tura_noapte ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}20` : 'transparent',
+                              color: pontaj?.tura_noapte ? dispatcherColors[pontaj.tura_noapte as DispatcherName] : 'inherit',
+                              border: pontaj?.tura_noapte ? `1px solid ${dispatcherColors[pontaj.tura_noapte as DispatcherName]}40` : 'none'
+                            }}
+                          >
                             {pontaj?.tura_noapte || '-'}
                           </div>
                         )}
@@ -338,14 +368,25 @@ export const Pontaj = () => {
               <CardTitle>Dispeceri</CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-2">
+              <div className="space-y-3">
                 {dispatchers.map((dispatcher) => (
-                  <li key={dispatcher} className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-primary" />
-                    <span className="text-sm">{dispatcher}</span>
-                  </li>
+                  <div key={dispatcher} className="flex items-center gap-2">
+                    <div 
+                      className="w-4 h-4 rounded-full flex-shrink-0" 
+                      style={{ backgroundColor: dispatcherColors[dispatcher] }}
+                    />
+                    <span className="text-sm flex-1">{dispatcher}</span>
+                    {isAdmin && (
+                      <Input
+                        type="color"
+                        value={dispatcherColors[dispatcher]}
+                        onChange={(e) => handleColorChange(dispatcher, e.target.value)}
+                        className="w-10 h-8 p-1 cursor-pointer"
+                      />
+                    )}
+                  </div>
                 ))}
-              </ul>
+              </div>
             </CardContent>
           </Card>
         </div>
