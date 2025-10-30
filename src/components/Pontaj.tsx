@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdmin } from '@/hooks/useAdmin';
 import { useToast } from '@/hooks/use-toast';
 import { DispatcherName } from '@/types/dispatcher';
-import { Plus } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 interface PontajEntry {
   id: string;
@@ -21,19 +22,27 @@ export const Pontaj = () => {
   const { toast } = useToast();
   const [pontaje, setPontaje] = useState<PontajEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedMonth, setSelectedMonth] = useState<string>(new Date().toISOString().slice(0, 7));
+  const [showMonthSelector, setShowMonthSelector] = useState(false);
 
   const dispatchers: DispatcherName[] = ['Luiza', 'Laura', 'Rely', 'Antigona', 'Memeta'];
 
   useEffect(() => {
     loadPontaje();
-  }, []);
+  }, [selectedMonth]);
 
   const loadPontaje = async () => {
     try {
+      const startDate = `${selectedMonth}-01`;
+      const endDate = new Date(new Date(selectedMonth).getFullYear(), new Date(selectedMonth).getMonth() + 1, 0)
+        .toISOString().split('T')[0];
+
       const { data, error } = await supabase
         .from('pontaj')
         .select('*')
-        .order('data', { ascending: false });
+        .gte('data', startDate)
+        .lte('data', endDate)
+        .order('data', { ascending: true });
 
       if (error) throw error;
       setPontaje((data || []) as PontajEntry[]);
@@ -49,33 +58,41 @@ export const Pontaj = () => {
     }
   };
 
-  const handleAddDate = async () => {
+  const handleGenerateMonth = async () => {
     if (!isAdmin) return;
 
-    const today = new Date().toISOString().split('T')[0];
+    const [year, month] = selectedMonth.split('-').map(Number);
+    const daysInMonth = new Date(year, month, 0).getDate();
     
     try {
-      const { error } = await supabase
-        .from('pontaj')
-        .insert({
-          data: today,
+      const entries = [];
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month - 1, day).toISOString().split('T')[0];
+        entries.push({
+          data: date,
           tura_zi: null,
           tura_noapte: null
         });
+      }
+
+      const { error } = await supabase
+        .from('pontaj')
+        .upsert(entries, { onConflict: 'data', ignoreDuplicates: true });
 
       if (error) throw error;
       
       toast({
         title: 'Succes',
-        description: 'Data a fost adăugată'
+        description: `Luna ${month}/${year} a fost generată`
       });
       
       loadPontaje();
+      setShowMonthSelector(false);
     } catch (error: any) {
-      console.error('Error adding date:', error);
+      console.error('Error generating month:', error);
       toast({
         title: 'Eroare',
-        description: error.message || 'Nu s-a putut adăuga data',
+        description: error.message || 'Nu s-a putut genera luna',
         variant: 'destructive'
       });
     }
@@ -118,17 +135,25 @@ export const Pontaj = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Pontaj Dispeceri</h2>
           <p className="text-muted-foreground">Gestionare ture zilnice</p>
         </div>
-        {isAdmin && (
-          <Button onClick={handleAddDate} size="lg">
-            <Plus className="w-4 h-4 mr-2" />
-            Adaugă Dată
-          </Button>
-        )}
+        <div className="flex items-center gap-3">
+          <Input
+            type="month"
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="w-auto"
+          />
+          {isAdmin && (
+            <Button onClick={handleGenerateMonth} size="lg">
+              <Calendar className="w-4 h-4 mr-2" />
+              Generează Luna
+            </Button>
+          )}
+        </div>
       </div>
 
       <Card>
