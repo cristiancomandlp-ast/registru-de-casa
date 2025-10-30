@@ -81,19 +81,21 @@ export const Pontaj = () => {
     }
   };
 
-  const handleUpdateShift = async (id: string, field: 'tura_zi' | 'tura_noapte', value: string | null) => {
+  const handleUpdateShift = async (id: string, field: 'tura_zi' | 'tura_noapte', value: string) => {
     if (!isAdmin) return;
+
+    const actualValue = value === 'none' ? null : value;
 
     try {
       const { error } = await supabase
         .from('pontaj')
-        .update({ [field]: value })
+        .update({ [field]: actualValue })
         .eq('id', id);
 
       if (error) throw error;
       
       setPontaje(prev => 
-        prev.map(p => p.id === id ? { ...p, [field]: value } : p)
+        prev.map(p => p.id === id ? { ...p, [field]: actualValue } : p)
       );
       
       toast({
@@ -160,14 +162,14 @@ export const Pontaj = () => {
                       <TableCell>
                         {isAdmin ? (
                           <Select
-                            value={entry.tura_zi || ''}
-                            onValueChange={(value) => handleUpdateShift(entry.id, 'tura_zi', value || null)}
+                            value={entry.tura_zi || 'none'}
+                            onValueChange={(value) => handleUpdateShift(entry.id, 'tura_zi', value)}
                           >
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Selectează dispecer" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">Niciun dispecer</SelectItem>
+                              <SelectItem value="none">Niciun dispecer</SelectItem>
                               {dispatchers.map((d) => (
                                 <SelectItem key={d} value={d}>{d}</SelectItem>
                               ))}
@@ -182,14 +184,14 @@ export const Pontaj = () => {
                       <TableCell>
                         {isAdmin ? (
                           <Select
-                            value={entry.tura_noapte || ''}
-                            onValueChange={(value) => handleUpdateShift(entry.id, 'tura_noapte', value || null)}
+                            value={entry.tura_noapte || 'none'}
+                            onValueChange={(value) => handleUpdateShift(entry.id, 'tura_noapte', value)}
                           >
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Selectează dispecer" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">Niciun dispecer</SelectItem>
+                              <SelectItem value="none">Niciun dispecer</SelectItem>
                               {dispatchers.map((d) => (
                                 <SelectItem key={d} value={d}>{d}</SelectItem>
                               ))}
