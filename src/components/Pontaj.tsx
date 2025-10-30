@@ -201,13 +201,12 @@ export const Pontaj = () => {
 
   return (
     <div className="space-y-6 p-4">
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Calendar */}
-        <Card className="flex-1">
-          <CardHeader>
-            <CardTitle className="text-2xl">Pontaj Lunar Dispeceri</CardTitle>
-          </CardHeader>
-          <CardContent>
+      {/* Calendar */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">Pontaj Lunar Dispeceri</CardTitle>
+        </CardHeader>
+        <CardContent>
             {/* Calendar Header */}
             <div className="flex items-center justify-between mb-6">
               <Button variant="outline" size="icon" onClick={previousMonth}>
@@ -231,10 +230,10 @@ export const Pontaj = () => {
             </div>
 
             {/* Calendar Grid */}
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-3">
               {days.map((day, index) => {
                 if (day === null) {
-                  return <div key={`empty-${index}`} className="min-h-[140px]" />;
+                  return <div key={`empty-${index}`} className="min-h-[160px]" />;
                 }
 
                 const dateStr = new Date(year, month, day).toISOString().split('T')[0];
@@ -242,22 +241,22 @@ export const Pontaj = () => {
                 const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
 
                 return (
-                  <Card key={day} className={`p-2 min-h-[140px] ${isToday ? 'ring-2 ring-primary' : ''}`}>
+                  <Card key={day} className={`p-3 min-h-[160px] ${isToday ? 'ring-2 ring-primary' : ''}`}>
                     <div className="space-y-2">
                       {/* Day number */}
-                      <div className={`text-center font-bold text-sm ${isToday ? 'text-primary' : ''}`}>
+                      <div className={`text-center font-bold text-base mb-2 ${isToday ? 'text-primary' : ''}`}>
                         {day}
                       </div>
 
                       {/* Tura Zi */}
                       <div className="space-y-1">
-                        <div className="text-[10px] font-medium text-muted-foreground">Zi</div>
+                        <div className="text-xs font-semibold text-muted-foreground">Zi</div>
                         {isAdmin ? (
                           <Select
                             value={pontaj?.tura_zi || 'none'}
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_zi', value)}
                           >
-                            <SelectTrigger className="h-7 text-xs">
+                            <SelectTrigger className="h-8 text-xs">
                               <SelectValue placeholder="-" />
                             </SelectTrigger>
                             <SelectContent>
@@ -269,11 +268,11 @@ export const Pontaj = () => {
                           </Select>
                         ) : (
                           <div 
-                            className="text-xs font-medium text-center py-1 px-1 rounded"
+                            className="text-xs font-semibold text-center py-2 px-2 rounded-md"
                             style={{ 
-                              backgroundColor: pontaj?.tura_zi ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}20` : 'transparent',
+                              backgroundColor: pontaj?.tura_zi ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}30` : 'transparent',
                               color: pontaj?.tura_zi ? dispatcherColors[pontaj.tura_zi as DispatcherName] : 'inherit',
-                              border: pontaj?.tura_zi ? `1px solid ${dispatcherColors[pontaj.tura_zi as DispatcherName]}40` : 'none'
+                              border: pontaj?.tura_zi ? `2px solid ${dispatcherColors[pontaj.tura_zi as DispatcherName]}` : '1px solid hsl(var(--border))'
                             }}
                           >
                             {pontaj?.tura_zi || '-'}
@@ -283,13 +282,13 @@ export const Pontaj = () => {
 
                       {/* Tura Noapte */}
                       <div className="space-y-1">
-                        <div className="text-[10px] font-medium text-muted-foreground">Noapte</div>
+                        <div className="text-xs font-semibold text-muted-foreground">Noapte</div>
                         {isAdmin ? (
                           <Select
                             value={pontaj?.tura_noapte || 'none'}
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_noapte', value)}
                           >
-                            <SelectTrigger className="h-7 text-xs">
+                            <SelectTrigger className="h-8 text-xs">
                               <SelectValue placeholder="-" />
                             </SelectTrigger>
                             <SelectContent>
@@ -301,11 +300,11 @@ export const Pontaj = () => {
                           </Select>
                         ) : (
                           <div 
-                            className="text-xs font-medium text-center py-1 px-1 rounded"
+                            className="text-xs font-semibold text-center py-2 px-2 rounded-md"
                             style={{ 
-                              backgroundColor: pontaj?.tura_noapte ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}20` : 'transparent',
+                              backgroundColor: pontaj?.tura_noapte ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}30` : 'transparent',
                               color: pontaj?.tura_noapte ? dispatcherColors[pontaj.tura_noapte as DispatcherName] : 'inherit',
-                              border: pontaj?.tura_noapte ? `1px solid ${dispatcherColors[pontaj.tura_noapte as DispatcherName]}40` : 'none'
+                              border: pontaj?.tura_noapte ? `2px solid ${dispatcherColors[pontaj.tura_noapte as DispatcherName]}` : '1px solid hsl(var(--border))'
                             }}
                           >
                             {pontaj?.tura_noapte || '-'}
@@ -320,76 +319,78 @@ export const Pontaj = () => {
           </CardContent>
         </Card>
 
-        {/* Sidebar */}
-        <div className="lg:w-80 space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Acțiuni Rapide</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="text-sm font-medium mb-2 block">Selectează Luna</label>
-                <Select
-                  value={`${year}-${String(month + 1).padStart(2, '0')}`}
-                  onValueChange={(value) => {
-                    const [newYear, newMonth] = value.split('-').map(Number);
-                    setCurrentDate(new Date(newYear, newMonth - 1, 1));
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 24 }, (_, i) => {
-                      const date = new Date();
-                      date.setMonth(date.getMonth() - 12 + i);
-                      const y = date.getFullYear();
-                      const m = date.getMonth();
-                      return (
-                        <SelectItem key={i} value={`${y}-${String(m + 1).padStart(2, '0')}`}>
-                          {monthNames[m]} {y}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-              </div>
+      {/* Panels below calendar */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Acțiuni Rapide</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label className="text-sm font-medium mb-2 block">Selectează Luna</Label>
+              <Select
+                value={`${year}-${String(month + 1).padStart(2, '0')}`}
+                onValueChange={(value) => {
+                  const [newYear, newMonth] = value.split('-').map(Number);
+                  setCurrentDate(new Date(newYear, newMonth - 1, 1));
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 24 }, (_, i) => {
+                    const date = new Date();
+                    date.setMonth(date.getMonth() - 12 + i);
+                    const y = date.getFullYear();
+                    const m = date.getMonth();
+                    return (
+                      <SelectItem key={i} value={`${y}-${String(m + 1).padStart(2, '0')}`}>
+                        {monthNames[m]} {y}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
 
-              {isAdmin && (
-                <Button onClick={handleGenerateMonth} className="w-full">
-                  Generează Toate Zilele
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+            {isAdmin && (
+              <Button onClick={handleGenerateMonth} className="w-full">
+                Generează Toate Zilele
+              </Button>
+            )}
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Dispeceri</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {dispatchers.map((dispatcher) => (
-                  <div key={dispatcher} className="flex items-center gap-2">
-                    <div 
-                      className="w-4 h-4 rounded-full flex-shrink-0" 
-                      style={{ backgroundColor: dispatcherColors[dispatcher] }}
+        <Card>
+          <CardHeader>
+            <CardTitle>Dispeceri și Culori</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {dispatchers.map((dispatcher) => (
+                <div key={dispatcher} className="flex items-center gap-3">
+                  <div 
+                    className="w-6 h-6 rounded-full flex-shrink-0 border-2" 
+                    style={{ 
+                      backgroundColor: dispatcherColors[dispatcher],
+                      borderColor: dispatcherColors[dispatcher]
+                    }}
+                  />
+                  <span className="text-sm font-medium flex-1">{dispatcher}</span>
+                  {isAdmin && (
+                    <Input
+                      type="color"
+                      value={dispatcherColors[dispatcher]}
+                      onChange={(e) => handleColorChange(dispatcher, e.target.value)}
+                      className="w-12 h-9 p-1 cursor-pointer"
                     />
-                    <span className="text-sm flex-1">{dispatcher}</span>
-                    {isAdmin && (
-                      <Input
-                        type="color"
-                        value={dispatcherColors[dispatcher]}
-                        onChange={(e) => handleColorChange(dispatcher, e.target.value)}
-                        className="w-10 h-8 p-1 cursor-pointer"
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
