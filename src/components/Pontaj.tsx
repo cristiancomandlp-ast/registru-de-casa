@@ -233,7 +233,7 @@ export const Pontaj = () => {
             <div className="grid grid-cols-7 gap-3">
               {days.map((day, index) => {
                 if (day === null) {
-                  return <div key={`empty-${index}`} className="min-h-[160px]" />;
+                  return <div key={`empty-${index}`} className="min-h-[180px]" />;
                 }
 
                 const dateStr = new Date(year, month, day).toISOString().split('T')[0];
@@ -241,7 +241,7 @@ export const Pontaj = () => {
                 const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
 
                 return (
-                  <Card key={day} className={`p-3 min-h-[160px] ${isToday ? 'ring-2 ring-primary' : ''}`}>
+                  <Card key={day} className={`p-3 min-h-[180px] ${isToday ? 'ring-2 ring-primary' : ''}`}>
                     <div className="space-y-2">
                       {/* Day number */}
                       <div className={`text-center font-bold text-base mb-2 ${isToday ? 'text-primary' : ''}`}>
@@ -256,21 +256,42 @@ export const Pontaj = () => {
                             value={pontaj?.tura_zi || 'none'}
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_zi', value)}
                           >
-                            <SelectTrigger className="h-8 text-xs">
+                            <SelectTrigger 
+                              className="h-10 text-sm font-semibold"
+                              style={{
+                                backgroundColor: pontaj?.tura_zi && pontaj.tura_zi !== 'none' 
+                                  ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}20`
+                                  : 'transparent',
+                                color: pontaj?.tura_zi && pontaj.tura_zi !== 'none'
+                                  ? dispatcherColors[pontaj.tura_zi as DispatcherName]
+                                  : 'inherit',
+                                borderColor: pontaj?.tura_zi && pontaj.tura_zi !== 'none'
+                                  ? dispatcherColors[pontaj.tura_zi as DispatcherName]
+                                  : 'hsl(var(--border))',
+                                borderWidth: '2px'
+                              }}
+                            >
                               <SelectValue placeholder="-" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="none">-</SelectItem>
                               {dispatchers.map((d) => (
-                                <SelectItem key={d} value={d}>{d}</SelectItem>
+                                <SelectItem 
+                                  key={d} 
+                                  value={d}
+                                  style={{ color: dispatcherColors[d] }}
+                                  className="font-semibold"
+                                >
+                                  {d}
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
                         ) : (
                           <div 
-                            className="text-xs font-semibold text-center py-2 px-2 rounded-md"
+                            className="text-sm font-bold text-center py-2.5 px-2 rounded-md min-h-[40px] flex items-center justify-center"
                             style={{ 
-                              backgroundColor: pontaj?.tura_zi ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}30` : 'transparent',
+                              backgroundColor: pontaj?.tura_zi ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}20` : 'transparent',
                               color: pontaj?.tura_zi ? dispatcherColors[pontaj.tura_zi as DispatcherName] : 'inherit',
                               border: pontaj?.tura_zi ? `2px solid ${dispatcherColors[pontaj.tura_zi as DispatcherName]}` : '1px solid hsl(var(--border))'
                             }}
@@ -288,21 +309,42 @@ export const Pontaj = () => {
                             value={pontaj?.tura_noapte || 'none'}
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_noapte', value)}
                           >
-                            <SelectTrigger className="h-8 text-xs">
+                            <SelectTrigger 
+                              className="h-10 text-sm font-semibold"
+                              style={{
+                                backgroundColor: pontaj?.tura_noapte && pontaj.tura_noapte !== 'none'
+                                  ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}20`
+                                  : 'transparent',
+                                color: pontaj?.tura_noapte && pontaj.tura_noapte !== 'none'
+                                  ? dispatcherColors[pontaj.tura_noapte as DispatcherName]
+                                  : 'inherit',
+                                borderColor: pontaj?.tura_noapte && pontaj.tura_noapte !== 'none'
+                                  ? dispatcherColors[pontaj.tura_noapte as DispatcherName]
+                                  : 'hsl(var(--border))',
+                                borderWidth: '2px'
+                              }}
+                            >
                               <SelectValue placeholder="-" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="none">-</SelectItem>
                               {dispatchers.map((d) => (
-                                <SelectItem key={d} value={d}>{d}</SelectItem>
+                                <SelectItem 
+                                  key={d} 
+                                  value={d}
+                                  style={{ color: dispatcherColors[d] }}
+                                  className="font-semibold"
+                                >
+                                  {d}
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
                         ) : (
                           <div 
-                            className="text-xs font-semibold text-center py-2 px-2 rounded-md"
+                            className="text-sm font-bold text-center py-2.5 px-2 rounded-md min-h-[40px] flex items-center justify-center"
                             style={{ 
-                              backgroundColor: pontaj?.tura_noapte ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}30` : 'transparent',
+                              backgroundColor: pontaj?.tura_noapte ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}20` : 'transparent',
                               color: pontaj?.tura_noapte ? dispatcherColors[pontaj.tura_noapte as DispatcherName] : 'inherit',
                               border: pontaj?.tura_noapte ? `2px solid ${dispatcherColors[pontaj.tura_noapte as DispatcherName]}` : '1px solid hsl(var(--border))'
                             }}
