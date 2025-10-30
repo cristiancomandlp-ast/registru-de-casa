@@ -62,6 +62,8 @@ export const Pontaj = () => {
     if (!isAdmin) return;
 
     const [year, month] = selectedMonth.split('-').map(Number);
+    // Get the actual number of days in the selected month
+    // month - 1 because JS months are 0-indexed, then +1 to get next month, then day 0 gives last day of current month
     const daysInMonth = new Date(year, month, 0).getDate();
     
     try {
