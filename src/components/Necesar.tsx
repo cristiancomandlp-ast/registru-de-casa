@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdmin } from '@/hooks/useAdmin';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { Pencil, Trash2, Plus } from 'lucide-react';
 
@@ -19,6 +20,7 @@ interface NecesarEntry {
 
 export const Necesar = () => {
   const { isAdmin, loading: adminLoading } = useAdmin();
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [items, setItems] = useState<NecesarEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,10 +70,10 @@ export const Necesar = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!isAdmin) {
+    if (!isAuthenticated) {
       toast({
         title: 'Acces interzis',
-        description: 'Doar administratorii pot modifica necesarul',
+        description: 'Trebuie să fiți autentificat',
         variant: 'destructive'
       });
       return;
@@ -126,7 +128,7 @@ export const Necesar = () => {
   };
 
   const handleEdit = (item: NecesarEntry) => {
-    if (!isAdmin) return;
+    if (!isAuthenticated) return;
     setEditingId(item.id);
     setFormData({
       nume_produs: item.nume_produs,
@@ -192,7 +194,7 @@ export const Necesar = () => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Necesar Lunar Dispecerat</CardTitle>
-          {isAdmin && !showAddForm && (
+          {isAuthenticated && !showAddForm && (
             <Button onClick={() => setShowAddForm(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Adaugă Produs
@@ -200,7 +202,7 @@ export const Necesar = () => {
           )}
         </CardHeader>
         <CardContent>
-          {showAddForm && isAdmin && (
+          {showAddForm && isAuthenticated && (
             <form onSubmit={handleSubmit} className="space-y-4 mb-6 p-4 bg-gray-50 rounded-lg">
               <div>
                 <label className="block text-sm font-medium mb-1">Nume produs</label>
@@ -256,13 +258,13 @@ export const Necesar = () => {
                   <TableHead>Cantitate</TableHead>
                   <TableHead>Luna/An</TableHead>
                   <TableHead>Observații</TableHead>
-                  {isAdmin && <TableHead>Acțiuni</TableHead>}
+                  {isAuthenticated && <TableHead>Acțiuni</TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {items.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={isAdmin ? 5 : 4} className="text-center text-gray-500">
+                    <TableCell colSpan={isAuthenticated ? 5 : 4} className="text-center text-gray-500">
                       Nu există produse adăugate
                     </TableCell>
                   </TableRow>
@@ -273,7 +275,7 @@ export const Necesar = () => {
                       <TableCell>{item.cantitate}</TableCell>
                       <TableCell>{formatMonthYear(item.luna_an)}</TableCell>
                       <TableCell>{item.observatii || '-'}</TableCell>
-                      {isAdmin && (
+                      {isAuthenticated && (
                         <TableCell>
                           <div className="flex gap-2">
                             <Button
@@ -283,13 +285,15 @@ export const Necesar = () => {
                             >
                               <Pencil className="w-4 h-4" />
                             </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => handleDelete(item.id)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                            {isAdmin && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleDelete(item.id)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            )}
                           </div>
                         </TableCell>
                       )}
