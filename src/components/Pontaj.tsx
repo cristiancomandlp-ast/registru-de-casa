@@ -229,13 +229,36 @@ export const Pontaj = () => {
         </CardHeader>
         <CardContent>
             {/* Calendar Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-6 gap-4">
               <Button variant="outline" size="icon" onClick={previousMonth}>
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <h3 className="text-xl font-semibold">
-                {monthNames[month]} {year}
-              </h3>
+              
+              <Select
+                value={`${year}-${String(month + 1).padStart(2, '0')}`}
+                onValueChange={(value) => {
+                  const [newYear, newMonth] = value.split('-').map(Number);
+                  setCurrentDate(new Date(newYear, newMonth - 1, 1));
+                }}
+              >
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 24 }, (_, i) => {
+                    const date = new Date();
+                    date.setMonth(date.getMonth() - 12 + i);
+                    const y = date.getFullYear();
+                    const m = date.getMonth();
+                    return (
+                      <SelectItem key={i} value={`${y}-${String(m + 1).padStart(2, '0')}`}>
+                        {monthNames[m]} {y}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+              
               <Button variant="outline" size="icon" onClick={nextMonth}>
                 <ChevronRight className="h-4 w-4" />
               </Button>
@@ -372,80 +395,6 @@ export const Pontaj = () => {
           </CardContent>
         </Card>
 
-      {/* Panels below calendar */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Acțiuni Rapide</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label className="text-sm font-medium mb-2 block">Selectează Luna</Label>
-              <Select
-                value={`${year}-${String(month + 1).padStart(2, '0')}`}
-                onValueChange={(value) => {
-                  const [newYear, newMonth] = value.split('-').map(Number);
-                  setCurrentDate(new Date(newYear, newMonth - 1, 1));
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 24 }, (_, i) => {
-                    const date = new Date();
-                    date.setMonth(date.getMonth() - 12 + i);
-                    const y = date.getFullYear();
-                    const m = date.getMonth();
-                    return (
-                      <SelectItem key={i} value={`${y}-${String(m + 1).padStart(2, '0')}`}>
-                        {monthNames[m]} {y}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {isAdmin && (
-              <Button onClick={handleGenerateMonth} className="w-full">
-                Generează Toate Zilele
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Dispeceri și Culori</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {dispatchers.map((dispatcher) => (
-                <div key={dispatcher} className="flex items-center gap-3">
-                  <div 
-                    className="w-6 h-6 rounded-full flex-shrink-0 border-2" 
-                    style={{ 
-                      backgroundColor: dispatcherColors[dispatcher],
-                      borderColor: dispatcherColors[dispatcher]
-                    }}
-                  />
-                  <span className="text-sm font-medium flex-1">{dispatcher}</span>
-                  {isAdmin && (
-                    <Input
-                      type="color"
-                      value={dispatcherColors[dispatcher]}
-                      onChange={(e) => handleColorChange(dispatcher, e.target.value)}
-                      className="w-12 h-9 p-1 cursor-pointer"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Statistics Report */}
       <Card>
         <CardHeader>
@@ -488,6 +437,43 @@ export const Pontaj = () => {
               );
             })}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Dispatcher Colors */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Dispeceri și Culori</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            {dispatchers.map((dispatcher) => (
+              <div key={dispatcher} className="flex items-center gap-3">
+                <div 
+                  className="w-6 h-6 rounded-full flex-shrink-0 border-2" 
+                  style={{ 
+                    backgroundColor: dispatcherColors[dispatcher],
+                    borderColor: dispatcherColors[dispatcher]
+                  }}
+                />
+                <span className="text-sm font-medium flex-1">{dispatcher}</span>
+                {isAdmin && (
+                  <Input
+                    type="color"
+                    value={dispatcherColors[dispatcher]}
+                    onChange={(e) => handleColorChange(dispatcher, e.target.value)}
+                    className="w-12 h-9 p-1 cursor-pointer"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          
+          {isAdmin && (
+            <Button onClick={handleGenerateMonth} className="w-full">
+              Generează Toate Zilele Lunii
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>
