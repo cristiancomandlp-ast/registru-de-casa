@@ -193,6 +193,27 @@ export const Pontaj = () => {
     }));
   };
 
+  const calculateShiftStats = () => {
+    const stats: Record<DispatcherName, { zi: number; noapte: number }> = {
+      'Luiza': { zi: 0, noapte: 0 },
+      'Laura': { zi: 0, noapte: 0 },
+      'Rely': { zi: 0, noapte: 0 },
+      'Antigona': { zi: 0, noapte: 0 },
+      'Memeta': { zi: 0, noapte: 0 }
+    };
+
+    pontaje.forEach(pontaj => {
+      if (pontaj.tura_zi && pontaj.tura_zi !== 'none') {
+        stats[pontaj.tura_zi as DispatcherName].zi++;
+      }
+      if (pontaj.tura_noapte && pontaj.tura_noapte !== 'none') {
+        stats[pontaj.tura_noapte as DispatcherName].noapte++;
+      }
+    });
+
+    return stats;
+  };
+
   if (loading || adminLoading) {
     return <div className="text-center p-4">Se încarcă...</div>;
   }
@@ -424,6 +445,51 @@ export const Pontaj = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Statistics Report */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Raport Ture Lucrate - {monthNames[month]} {year}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {dispatchers.map((dispatcher) => {
+              const stats = calculateShiftStats()[dispatcher];
+              const totalShifts = stats.zi + stats.noapte;
+              
+              return (
+                <div 
+                  key={dispatcher} 
+                  className="flex items-center gap-4 p-4 rounded-lg border-2"
+                  style={{ 
+                    borderColor: dispatcherColors[dispatcher],
+                    backgroundColor: `${dispatcherColors[dispatcher]}10`
+                  }}
+                >
+                  <div 
+                    className="w-3 h-12 rounded-full flex-shrink-0" 
+                    style={{ backgroundColor: dispatcherColors[dispatcher] }}
+                  />
+                  <div className="flex-1">
+                    <div className="font-bold text-lg mb-1">{dispatcher}</div>
+                    <div className="flex gap-6 text-sm">
+                      <span className="font-medium">
+                        <span className="text-muted-foreground">Zi:</span> <span className="font-bold">{stats.zi}</span>
+                      </span>
+                      <span className="font-medium">
+                        <span className="text-muted-foreground">Noapte:</span> <span className="font-bold">{stats.noapte}</span>
+                      </span>
+                      <span className="font-medium">
+                        <span className="text-muted-foreground">Total:</span> <span className="font-bold">{totalShifts}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
