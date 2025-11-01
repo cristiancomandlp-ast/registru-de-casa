@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DispatcherPanel } from '@/components/DispatcherPanel';
+import { LoanPanel } from '@/components/LoanPanel';
 import { History } from '@/components/History';
 import { ReportsDb } from '@/components/ReportsDb';
 import { Settings } from '@/components/Settings';
@@ -49,12 +50,18 @@ const Dashboard = () => {
           <Settings />
         ) : (
           <Tabs defaultValue="panou" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-6 h-12 bg-gray-100 border border-gray-300">
+            <TabsList className="grid w-full grid-cols-6 mb-6 h-12 bg-gray-100 border border-gray-300">
               <TabsTrigger 
                 value="panou"
                 className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
               >
-                Panou Dispecer
+                Registru de Casă
+              </TabsTrigger>
+              <TabsTrigger 
+                value="imprumut"
+                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
+              >
+                Imprumut
               </TabsTrigger>
               <TabsTrigger 
                 value="istoric"
@@ -84,6 +91,10 @@ const Dashboard = () => {
 
             <TabsContent value="panou" className="mt-0">
               <DispatcherPanel />
+            </TabsContent>
+
+            <TabsContent value="imprumut" className="mt-0">
+              <LoanPanel />
             </TabsContent>
 
             <TabsContent value="istoric" className="mt-0">
