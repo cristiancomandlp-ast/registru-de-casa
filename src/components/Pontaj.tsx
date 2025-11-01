@@ -257,18 +257,13 @@ export const Pontaj = () => {
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_zi', value)}
                           >
                             <SelectTrigger 
-                              className="h-10 text-sm font-semibold"
+                              className="h-10 text-sm font-bold border-2 border-black"
                               style={{
                                 backgroundColor: pontaj?.tura_zi && pontaj.tura_zi !== 'none' 
-                                  ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}20`
+                                  ? dispatcherColors[pontaj.tura_zi as DispatcherName]
                                   : 'transparent',
-                                color: pontaj?.tura_zi && pontaj.tura_zi !== 'none'
-                                  ? dispatcherColors[pontaj.tura_zi as DispatcherName]
-                                  : 'inherit',
-                                borderColor: pontaj?.tura_zi && pontaj.tura_zi !== 'none'
-                                  ? dispatcherColors[pontaj.tura_zi as DispatcherName]
-                                  : 'hsl(var(--border))',
-                                borderWidth: '2px'
+                                color: '#ffffff',
+                                textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
                               }}
                             >
                               <SelectValue placeholder="-" />
@@ -289,11 +284,11 @@ export const Pontaj = () => {
                           </Select>
                         ) : (
                           <div 
-                            className="text-sm font-bold text-center py-2.5 px-2 rounded-md min-h-[40px] flex items-center justify-center"
+                            className="text-sm font-bold text-center py-2.5 px-1 rounded-md min-h-[40px] flex items-center justify-center border-2 border-black"
                             style={{ 
-                              backgroundColor: pontaj?.tura_zi ? `${dispatcherColors[pontaj.tura_zi as DispatcherName]}20` : 'transparent',
-                              color: pontaj?.tura_zi ? dispatcherColors[pontaj.tura_zi as DispatcherName] : 'inherit',
-                              border: pontaj?.tura_zi ? `2px solid ${dispatcherColors[pontaj.tura_zi as DispatcherName]}` : '1px solid hsl(var(--border))'
+                              backgroundColor: pontaj?.tura_zi ? dispatcherColors[pontaj.tura_zi as DispatcherName] : 'transparent',
+                              color: '#ffffff',
+                              textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
                             }}
                           >
                             {pontaj?.tura_zi || '-'}
@@ -310,18 +305,13 @@ export const Pontaj = () => {
                             onValueChange={(value) => handleUpdateShift(dateStr, 'tura_noapte', value)}
                           >
                             <SelectTrigger 
-                              className="h-10 text-sm font-semibold"
+                              className="h-10 text-sm font-bold border-2 border-black"
                               style={{
                                 backgroundColor: pontaj?.tura_noapte && pontaj.tura_noapte !== 'none'
-                                  ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}20`
+                                  ? dispatcherColors[pontaj.tura_noapte as DispatcherName]
                                   : 'transparent',
-                                color: pontaj?.tura_noapte && pontaj.tura_noapte !== 'none'
-                                  ? dispatcherColors[pontaj.tura_noapte as DispatcherName]
-                                  : 'inherit',
-                                borderColor: pontaj?.tura_noapte && pontaj.tura_noapte !== 'none'
-                                  ? dispatcherColors[pontaj.tura_noapte as DispatcherName]
-                                  : 'hsl(var(--border))',
-                                borderWidth: '2px'
+                                color: '#ffffff',
+                                textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
                               }}
                             >
                               <SelectValue placeholder="-" />
@@ -342,11 +332,11 @@ export const Pontaj = () => {
                           </Select>
                         ) : (
                           <div 
-                            className="text-sm font-bold text-center py-2.5 px-2 rounded-md min-h-[40px] flex items-center justify-center"
+                            className="text-sm font-bold text-center py-2.5 px-1 rounded-md min-h-[40px] flex items-center justify-center border-2 border-black"
                             style={{ 
-                              backgroundColor: pontaj?.tura_noapte ? `${dispatcherColors[pontaj.tura_noapte as DispatcherName]}20` : 'transparent',
-                              color: pontaj?.tura_noapte ? dispatcherColors[pontaj.tura_noapte as DispatcherName] : 'inherit',
-                              border: pontaj?.tura_noapte ? `2px solid ${dispatcherColors[pontaj.tura_noapte as DispatcherName]}` : '1px solid hsl(var(--border))'
+                              backgroundColor: pontaj?.tura_noapte ? dispatcherColors[pontaj.tura_noapte as DispatcherName] : 'transparent',
+                              color: '#ffffff',
+                              textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
                             }}
                           >
                             {pontaj?.tura_noapte || '-'}
