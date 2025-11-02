@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Transaction {
   id: string;
@@ -23,8 +24,52 @@ export const LoanPanel = () => {
   const [intrareDesc, setIntrareDesc] = useState("");
   const [iesireAmount, setIesireAmount] = useState("");
   const [iesireDesc, setIesireDesc] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const addTransaction = (type: "intrare" | "iesire") => {
+  // Load transactions from database
+  useEffect(() => {
+    loadTransactions();
+  }, []);
+
+  const loadTransactions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('loan_transactions')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+      if (error) throw error;
+
+      if (data) {
+        const formattedTransactions: Transaction[] = data.map(t => ({
+          id: t.id,
+          type: t.type as "intrare" | "iesire",
+          amount: Number(t.amount),
+          description: t.description,
+          timestamp: t.timestamp,
+        }));
+
+        setTransactions(formattedTransactions);
+
+        // Calculate balance from all transactions
+        const calculatedBalance = formattedTransactions.reduce((acc, t) => {
+          return t.type === "intrare" ? acc + t.amount : acc - t.amount;
+        }, 0);
+        setBalance(calculatedBalance);
+      }
+    } catch (error) {
+      console.error('Error loading transactions:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-au putut încărca tranzacțiile",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addTransaction = async (type: "intrare" | "iesire") => {
     const amount = type === "intrare" ? parseFloat(intrareAmount) : parseFloat(iesireAmount);
     const description = type === "intrare" ? intrareDesc : iesireDesc;
 
@@ -37,34 +82,44 @@ export const LoanPanel = () => {
       return;
     }
 
-    const transaction: Transaction = {
-      id: `trans_${Date.now()}`,
-      type,
-      amount,
-      description,
-      timestamp: new Date().toISOString(),
-    };
+    try {
+      // Save to database
+      const { data, error } = await supabase
+        .from('loan_transactions')
+        .insert({
+          type,
+          amount,
+          description,
+        })
+        .select()
+        .single();
 
-    const newBalance = type === "intrare" 
-      ? balance + amount 
-      : balance - amount;
+      if (error) throw error;
 
-    setBalance(newBalance);
-    setTransactions([transaction, ...transactions]);
+      // Reload transactions to update UI
+      await loadTransactions();
 
-    // Resetează câmpurile
-    if (type === "intrare") {
-      setIntrareAmount("");
-      setIntrareDesc("");
-    } else {
-      setIesireAmount("");
-      setIesireDesc("");
+      // Resetează câmpurile
+      if (type === "intrare") {
+        setIntrareAmount("");
+        setIntrareDesc("");
+      } else {
+        setIesireAmount("");
+        setIesireDesc("");
+      }
+
+      toast({
+        title: "Tranzacție adăugată",
+        description: `${type === "intrare" ? "Intrare" : "Ieșire"}: ${amount} lei`,
+      });
+    } catch (error) {
+      console.error('Error adding transaction:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut adăuga tranzacția",
+        variant: "destructive",
+      });
     }
-
-    toast({
-      title: "Tranzacție adăugată",
-      description: `${type === "intrare" ? "Intrare" : "Ieșire"}: ${amount} lei`,
-    });
   };
 
   return (

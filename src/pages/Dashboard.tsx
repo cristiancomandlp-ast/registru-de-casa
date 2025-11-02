@@ -58,12 +58,6 @@ const Dashboard = () => {
                 Registru de Casă
               </TabsTrigger>
               <TabsTrigger 
-                value="imprumut"
-                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
-              >
-                Imprumut
-              </TabsTrigger>
-              <TabsTrigger 
                 value="istoric"
                 className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
               >
@@ -74,6 +68,12 @@ const Dashboard = () => {
                 className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
               >
                 Rapoarte
+              </TabsTrigger>
+              <TabsTrigger 
+                value="sold-mihai"
+                className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm font-medium"
+              >
+                SOLD MIHAI
               </TabsTrigger>
               <TabsTrigger 
                 value="pontaj"
@@ -93,16 +93,16 @@ const Dashboard = () => {
               <DispatcherPanel />
             </TabsContent>
 
-            <TabsContent value="imprumut" className="mt-0">
-              <LoanPanel />
-            </TabsContent>
-
             <TabsContent value="istoric" className="mt-0">
               <History />
             </TabsContent>
 
             <TabsContent value="rapoarte" className="mt-0">
               <ReportsDb />
+            </TabsContent>
+
+            <TabsContent value="sold-mihai" className="mt-0">
+              <LoanPanel />
             </TabsContent>
 
             <TabsContent value="pontaj" className="mt-0">

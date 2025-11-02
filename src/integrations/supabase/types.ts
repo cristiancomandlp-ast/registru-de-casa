@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      loan_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string
+          id: string
+          timestamp: string
+          type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description: string
+          id?: string
+          timestamp?: string
+          type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string
+          id?: string
+          timestamp?: string
+          type?: string
+        }
+        Relationships: []
+      }
       necesar: {
         Row: {
           cantitate: string
