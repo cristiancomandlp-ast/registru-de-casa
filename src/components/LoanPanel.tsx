@@ -4,10 +4,13 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 import { useToast } from '@/hooks/use-toast';
+import { useAdmin } from '@/hooks/useAdmin';
 import { supabase } from '@/integrations/supabase/client';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Pencil, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -22,6 +25,7 @@ interface Transaction {
 export const LoanPanel = () => {
   const { formatDate, formatTime } = useCurrentDateTime();
   const { toast } = useToast();
+  const { isAdmin } = useAdmin();
 
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -32,6 +36,13 @@ export const LoanPanel = () => {
   const [iesireDesc, setIesireDesc] = useState("");
   const [iesireDate, setIesireDate] = useState<Date>(new Date());
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Edit state
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [editAmount, setEditAmount] = useState("");
+  const [editDesc, setEditDesc] = useState("");
+  const [editDate, setEditDate] = useState<Date>(new Date());
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   // Load transactions from database
   useEffect(() => {
@@ -128,6 +139,82 @@ export const LoanPanel = () => {
       toast({
         title: "Eroare",
         description: "Nu s-a putut adăuga tranzacția",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const startEdit = (transaction: Transaction) => {
+    setEditingTransaction(transaction);
+    setEditAmount(transaction.amount.toString());
+    setEditDesc(transaction.description);
+    setEditDate(new Date(transaction.timestamp));
+    setIsEditDialogOpen(true);
+  };
+
+  const saveEdit = async () => {
+    if (!editingTransaction) return;
+
+    const amount = parseFloat(editAmount);
+    if (isNaN(amount) || amount <= 0) {
+      toast({
+        title: "Eroare",
+        description: "Introdu o sumă validă",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('loan_transactions')
+        .update({
+          amount,
+          description: editDesc,
+          timestamp: editDate.toISOString(),
+        })
+        .eq('id', editingTransaction.id);
+
+      if (error) throw error;
+
+      await loadTransactions();
+      setIsEditDialogOpen(false);
+      setEditingTransaction(null);
+
+      toast({
+        title: "Succes",
+        description: "Tranzacția a fost actualizată",
+      });
+    } catch (error) {
+      console.error('Error updating transaction:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut actualiza tranzacția",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const deleteTransaction = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('loan_transactions')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      await loadTransactions();
+
+      toast({
+        title: "Succes",
+        description: "Tranzacția a fost ștearsă",
+      });
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-a putut șterge tranzacția",
         variant: "destructive",
       });
     }
@@ -272,7 +359,7 @@ export const LoanPanel = () => {
                         : "bg-red-50 border-red-200"
                     }`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start gap-2">
                       <div className="flex-1">
                         <div className="font-medium">
                           {transaction.type === "intrare" ? "+" : "-"}
@@ -282,9 +369,51 @@ export const LoanPanel = () => {
                           {transaction.description}
                         </div>
                       </div>
-                      <div className="text-xs text-muted-foreground text-right">
-                        <div>{timeStr}</div>
-                        <div>{dateStr}</div>
+                      <div className="flex items-start gap-2">
+                        <div className="text-xs text-muted-foreground text-right">
+                          <div>{timeStr}</div>
+                          <div>{dateStr}</div>
+                        </div>
+                        {isAdmin && (
+                          <div className="flex gap-1">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8"
+                              onClick={() => startEdit(transaction)}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8 text-destructive"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Ești sigur că vrei să ștergi această tranzacție? Această acțiune nu poate fi anulată.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Anulează</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteTransaction(transaction.id)}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  >
+                                    Șterge
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -294,6 +423,68 @@ export const LoanPanel = () => {
           </div>
         </Card>
       </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editează tranzacția</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Descriere</label>
+              <Input
+                value={editDesc}
+                onChange={(e) => setEditDesc(e.target.value)}
+                placeholder="Descriere"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Data</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !editDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {editDate ? format(editDate, "dd/MM/yyyy") : <span>Selectează data</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={editDate}
+                    onSelect={(date) => date && setEditDate(date)}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Sumă (lei)</label>
+              <Input
+                type="number"
+                value={editAmount}
+                onChange={(e) => setEditAmount(e.target.value)}
+                placeholder="Sumă"
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Anulează
+              </Button>
+              <Button onClick={saveEdit}>
+                Salvează
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
