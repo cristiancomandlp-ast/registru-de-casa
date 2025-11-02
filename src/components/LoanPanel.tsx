@@ -2,9 +2,14 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface Transaction {
   id: string;
@@ -22,8 +27,10 @@ export const LoanPanel = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [intrareAmount, setIntrareAmount] = useState("");
   const [intrareDesc, setIntrareDesc] = useState("");
+  const [intrareDate, setIntrareDate] = useState<Date>(new Date());
   const [iesireAmount, setIesireAmount] = useState("");
   const [iesireDesc, setIesireDesc] = useState("");
+  const [iesireDate, setIesireDate] = useState<Date>(new Date());
   const [isLoading, setIsLoading] = useState(true);
 
   // Load transactions from database
@@ -72,6 +79,7 @@ export const LoanPanel = () => {
   const addTransaction = async (type: "intrare" | "iesire") => {
     const amount = type === "intrare" ? parseFloat(intrareAmount) : parseFloat(iesireAmount);
     const description = type === "intrare" ? intrareDesc : iesireDesc;
+    const selectedDate = type === "intrare" ? intrareDate : iesireDate;
 
     if (isNaN(amount) || amount <= 0) {
       toast({
@@ -83,13 +91,14 @@ export const LoanPanel = () => {
     }
 
     try {
-      // Save to database
+      // Save to database with custom timestamp
       const { data, error } = await supabase
         .from('loan_transactions')
         .insert({
           type,
           amount,
           description,
+          timestamp: selectedDate.toISOString(),
         })
         .select()
         .single();
@@ -103,9 +112,11 @@ export const LoanPanel = () => {
       if (type === "intrare") {
         setIntrareAmount("");
         setIntrareDesc("");
+        setIntrareDate(new Date());
       } else {
         setIesireAmount("");
         setIesireDesc("");
+        setIesireDate(new Date());
       }
 
       toast({
@@ -141,6 +152,29 @@ export const LoanPanel = () => {
               value={intrareDesc}
               onChange={(e) => setIntrareDesc(e.target.value)}
             />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !intrareDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {intrareDate ? format(intrareDate, "dd/MM/yyyy") : <span>Selectează data</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={intrareDate}
+                  onSelect={(date) => date && setIntrareDate(date)}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
             <div className="flex gap-2">
               <Input
                 type="number"
@@ -165,6 +199,29 @@ export const LoanPanel = () => {
               value={iesireDesc}
               onChange={(e) => setIesireDesc(e.target.value)}
             />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !iesireDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {iesireDate ? format(iesireDate, "dd/MM/yyyy") : <span>Selectează data</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={iesireDate}
+                  onSelect={(date) => date && setIesireDate(date)}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
             <div className="flex gap-2">
               <Input
                 type="number"
