@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      drink_orders: {
+        Row: {
+          adresa_destinatie: string
+          adresa_preluare: string
+          created_at: string
+          data_ora: string
+          id: string
+          indicativ: string
+          marca_auto: string
+          nume_client: string
+          status: string
+          telefon_client: string
+          timp_estimat: string
+          updated_at: string | null
+        }
+        Insert: {
+          adresa_destinatie: string
+          adresa_preluare: string
+          created_at?: string
+          data_ora?: string
+          id?: string
+          indicativ: string
+          marca_auto: string
+          nume_client: string
+          status: string
+          telefon_client: string
+          timp_estimat: string
+          updated_at?: string | null
+        }
+        Update: {
+          adresa_destinatie?: string
+          adresa_preluare?: string
+          created_at?: string
+          data_ora?: string
+          id?: string
+          indicativ?: string
+          marca_auto?: string
+          nume_client?: string
+          status?: string
+          telefon_client?: string
+          timp_estimat?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       loan_transactions: {
         Row: {
           amount: number
