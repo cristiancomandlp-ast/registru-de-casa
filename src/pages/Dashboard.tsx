@@ -10,6 +10,7 @@ import { Settings as SettingsIcon, LogOut, FileText, History as HistoryIcon, Fil
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 import pelicanulLogo from '@/assets/pelicanul-logo.jpg';
 
 type ViewType = 'registru' | 'istoric' | 'rapoarte' | 'sold-mihai' | 'necesar' | 'pontaj';
@@ -17,7 +18,8 @@ type ViewType = 'registru' | 'istoric' | 'rapoarte' | 'sold-mihai' | 'necesar' |
 const Dashboard = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [activeView, setActiveView] = useState<ViewType | null>(null);
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+  const { formatDate, formatTime } = useCurrentDateTime();
 
   const navigationCards = [
     { id: 'registru' as ViewType, label: 'REGISTRU DE CASĂ', icon: FileText, color: 'bg-blue-600 hover:bg-blue-700' },
@@ -48,33 +50,40 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <div className="container max-w-4xl mx-auto p-4 md:p-6">
         <div className="mb-6 flex flex-col gap-4">
+          <div className="flex justify-between items-start">
+            <div className="text-left">
+              <div className="text-lg font-semibold text-gray-800">{formatTime()}</div>
+              <div className="text-sm text-gray-600">{formatDate()}</div>
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              <div className="text-sm font-medium text-gray-800">{user?.email}</div>
+              <div className="flex gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowSettings(!showSettings)}
+                >
+                  <SettingsIcon className="h-5 w-5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={signOut}
+                  title="Deconectare"
+                >
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
           <img 
             src={pelicanulLogo} 
             alt="Pelicanul Taxi Logo" 
             className="w-64 mx-auto"
           />
-          <div className="flex justify-end items-center">
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowSettings(!showSettings)}
-              >
-                <SettingsIcon className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={signOut}
-                title="Deconectare"
-              >
-                <LogOut className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
         </div>
 
         {showSettings ? (
