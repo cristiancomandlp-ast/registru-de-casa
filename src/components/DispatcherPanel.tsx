@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
-import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 import { useGoogleSheets } from '@/hooks/useGoogleSheets';
 import { useShifts } from '@/hooks/useShifts';
 import { useToast } from '@/hooks/use-toast';
@@ -12,7 +11,6 @@ import { DispatcherName, Transaction, Shift } from '@/types/dispatcher';
 const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Memeta"];
 
 export const DispatcherPanel = () => {
-  const { formatDate, formatTime } = useCurrentDateTime();
   const { saveTransaction, saveShift } = useGoogleSheets();
   const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts();
   const { toast } = useToast();
@@ -138,12 +136,6 @@ export const DispatcherPanel = () => {
 
   return (
     <div className="space-y-6">
-      {/* Data și ora */}
-      <div className="text-right">
-        <div className="text-2xl font-bold text-foreground">{formatTime()}</div>
-        <div className="text-sm text-muted-foreground">{formatDate()}</div>
-      </div>
-
       {/* Selectare dispecer și început tură */}
       {!currentShift ? (
         <Card className="p-6">

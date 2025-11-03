@@ -6,7 +6,6 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 import { useToast } from '@/hooks/use-toast';
 import { useAdmin } from '@/hooks/useAdmin';
 import { supabase } from '@/integrations/supabase/client';
@@ -23,7 +22,6 @@ interface Transaction {
 }
 
 export const LoanPanel = () => {
-  const { formatDate, formatTime } = useCurrentDateTime();
   const { toast } = useToast();
   const { isAdmin } = useAdmin();
 
@@ -222,12 +220,6 @@ export const LoanPanel = () => {
 
   return (
     <div className="space-y-6">
-      {/* Data și ora */}
-      <div className="text-right">
-        <div className="text-2xl font-bold text-foreground">{formatTime()}</div>
-        <div className="text-sm text-muted-foreground">{formatDate()}</div>
-      </div>
-
       <div className="space-y-6">
         {/* Intrări */}
         <Card className="p-6">
