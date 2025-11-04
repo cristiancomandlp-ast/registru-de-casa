@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 
 interface DrinkOrder {
   id: string;
@@ -19,7 +16,6 @@ interface DrinkOrder {
 }
 
 export const DrinkHistory = () => {
-  const { toast } = useToast();
   const [orders, setOrders] = useState<DrinkOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -55,29 +51,12 @@ export const DrinkHistory = () => {
         .order('data_ora', { ascending: false });
 
       if (error) throw error;
-
       setOrders(data || []);
     } catch (error) {
       console.error('Error fetching orders:', error);
-      toast({
-        title: "Eroare",
-        description: "Nu s-au putut încărca comenzile",
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('ro-RO', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
   };
 
   if (isLoading) {
@@ -86,50 +65,77 @@ export const DrinkHistory = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-foreground">Istoric Comenzi DRINK OK</h2>
-        
+      <h2 className="text-2xl font-bold">Istoric Comenzi DRINK OK</h2>
+      
+      <div className="space-y-4">
         {orders.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">Nu există comenzi</p>
+          <Card className="p-8">
+            <p className="text-center text-muted-foreground">
+              Nicio comandă înregistrată încă
+            </p>
+          </Card>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Data și Ora</TableHead>
-                  <TableHead>Nume Client</TableHead>
-                  <TableHead>Telefon</TableHead>
-                  <TableHead>Adresă Preluare</TableHead>
-                  <TableHead>Adresă Destinație</TableHead>
-                  <TableHead>Marcă Auto</TableHead>
-                  <TableHead>Indicativ</TableHead>
-                  <TableHead>Timp Estimat</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{formatDateTime(order.data_ora)}</TableCell>
-                    <TableCell>{order.nume_client}</TableCell>
-                    <TableCell>{order.telefon_client}</TableCell>
-                    <TableCell>{order.adresa_preluare}</TableCell>
-                    <TableCell>{order.adresa_destinatie}</TableCell>
-                    <TableCell>{order.marca_auto}</TableCell>
-                    <TableCell>{order.indicativ}</TableCell>
-                    <TableCell>{order.timp_estimat}</TableCell>
-                    <TableCell>
-                      <Badge variant={order.status === 'acceptat' ? 'default' : 'destructive'}>
+          orders.map((order) => {
+            const orderDate = new Date(order.data_ora);
+            
+            return (
+              <Card key={order.id} className="p-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-lg font-semibold">{order.nume_client}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {orderDate.toLocaleDateString('ro-RO')} • {orderDate.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        order.status === 'acceptat' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
                         {order.status.toUpperCase()}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <div className="text-sm text-muted-foreground">Telefon</div>
+                      <div className="font-semibold">{order.telefon_client}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">Marcă Auto</div>
+                      <div className="font-semibold">{order.marca_auto}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">Indicativ</div>
+                      <div className="font-semibold">{order.indicativ}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">Timp Estimat</div>
+                      <div className="font-semibold">{order.timp_estimat}</div>
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-4">
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <span className="text-sm text-muted-foreground min-w-[100px]">Preluare:</span>
+                        <span className="text-sm font-medium">{order.adresa_preluare}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="text-sm text-muted-foreground min-w-[100px]">Destinație:</span>
+                        <span className="text-sm font-medium">{order.adresa_destinatie}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            );
+          })
         )}
-      </Card>
+      </div>
     </div>
   );
 };
