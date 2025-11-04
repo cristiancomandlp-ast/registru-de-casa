@@ -8,11 +8,12 @@ import { Pontaj } from '@/components/Pontaj';
 import { Necesar } from '@/components/Necesar';
 import { DrinkOk } from '@/components/DrinkOk';
 import { DrinkHistory } from '@/components/DrinkHistory';
-import { Settings as SettingsIcon, LogOut, FileText, History as HistoryIcon, FileSpreadsheet, Wallet, Users, ClipboardList } from 'lucide-react';
+import { Settings as SettingsIcon, LogOut, FileText, History as HistoryIcon, BarChart3, Wallet, Users, Package, ClipboardCheck, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
+import { useAdmin } from '@/hooks/useAdmin';
 import pelicanulLogo from '@/assets/pelicanul-logo.jpg';
 
 type ViewType = 'registru' | 'istoric' | 'rapoarte' | 'drink-ok' | 'istoric-drink' | 'sold-mihai' | 'necesar' | 'pontaj';
@@ -22,15 +23,16 @@ const Dashboard = () => {
   const [activeView, setActiveView] = useState<ViewType | null>(null);
   const { signOut, user } = useAuth();
   const { formatDate, formatTime } = useCurrentDateTime();
+  const { isAdmin } = useAdmin();
 
   const navigationCards = [
     { id: 'registru' as ViewType, label: 'REGISTRU DE CASĂ', icon: FileText, color: 'bg-blue-600 hover:bg-blue-700' },
     { id: 'istoric' as ViewType, label: 'ISTORIC', icon: HistoryIcon, color: 'bg-purple-600 hover:bg-purple-700' },
-    { id: 'rapoarte' as ViewType, label: 'RAPOARTE', icon: FileSpreadsheet, color: 'bg-green-600 hover:bg-green-700' },
-    { id: 'drink-ok' as ViewType, label: 'DRINK OK', icon: ClipboardList, color: 'bg-teal-600 hover:bg-teal-700' },
-    { id: 'istoric-drink' as ViewType, label: 'ISTORIC DRINK', icon: FileText, color: 'bg-cyan-600 hover:bg-cyan-700' },
+    { id: 'rapoarte' as ViewType, label: 'RAPOARTE', icon: BarChart3, color: 'bg-green-600 hover:bg-green-700' },
+    { id: 'drink-ok' as ViewType, label: 'DRINK OK', icon: ClipboardCheck, color: 'bg-teal-600 hover:bg-teal-700' },
+    { id: 'istoric-drink' as ViewType, label: 'ISTORIC DRINK', icon: Clock, color: 'bg-cyan-600 hover:bg-cyan-700' },
     { id: 'sold-mihai' as ViewType, label: 'SOLD MIHAI', icon: Wallet, color: 'bg-orange-600 hover:bg-orange-700' },
-    { id: 'necesar' as ViewType, label: 'NECESAR', icon: ClipboardList, color: 'bg-rose-600 hover:bg-rose-700' },
+    { id: 'necesar' as ViewType, label: 'NECESAR', icon: Package, color: 'bg-rose-600 hover:bg-rose-700' },
     { id: 'pontaj' as ViewType, label: 'PONTAJ', icon: Users, color: 'bg-pink-600 hover:bg-pink-700' },
   ];
 
@@ -67,6 +69,9 @@ const Dashboard = () => {
               <div className="text-sm text-gray-600">{formatDate()}</div>
             </div>
             <div className="flex flex-col items-end gap-2">
+              <div className="text-xs font-semibold text-gray-600 uppercase">
+                EȘTI LOGAT CA {isAdmin ? 'ADMIN' : 'DISPECER'}
+              </div>
               <div className="text-sm font-medium text-gray-800">{user?.email}</div>
               <div className="flex gap-2">
                 <Button
@@ -114,7 +119,7 @@ const Dashboard = () => {
               return (
                 <Card
                   key={card.id}
-                  className={`${card.color} border-0 cursor-pointer transition-all duration-200 active:scale-95`}
+                  className={`${card.color} border-2 border-black cursor-pointer transition-all duration-200 active:scale-95`}
                   onClick={() => setActiveView(card.id)}
                 >
                   <div className="flex items-center justify-center gap-3 py-8 px-6">

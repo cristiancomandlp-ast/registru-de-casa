@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 
 export const DrinkOk = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { formatDate, formatTime } = useCurrentDateTime();
   const [formData, setFormData] = useState({
     nume_client: '',
     telefon_client: '',
@@ -88,7 +90,10 @@ export const DrinkOk = () => {
   return (
     <div className="space-y-6">
       <Card className="p-6">
-        <h2 className="text-2xl font-bold mb-6 text-foreground">Comandă Nouă DRINK OK</h2>
+        <div className="mb-6 p-4 bg-muted rounded-lg">
+          <div className="text-lg font-semibold text-foreground">{formatTime()}</div>
+          <div className="text-sm text-muted-foreground">{formatDate()}</div>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
