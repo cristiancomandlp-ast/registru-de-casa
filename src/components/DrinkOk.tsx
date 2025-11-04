@@ -1,17 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 
 export const DrinkOk = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { formatDate, formatTime } = useCurrentDateTime();
   const [formData, setFormData] = useState({
+    data_ora: new Date().toISOString().slice(0, 16),
     nume_client: '',
     telefon_client: '',
     adresa_preluare: '',
@@ -36,7 +35,7 @@ export const DrinkOk = () => {
       return;
     }
 
-    if (!formData.nume_client || !formData.telefon_client || !formData.adresa_preluare || 
+    if (!formData.data_ora || !formData.nume_client || !formData.telefon_client || !formData.adresa_preluare || 
         !formData.adresa_destinatie || !formData.marca_auto || !formData.indicativ || !formData.timp_estimat) {
       toast({
         title: "Eroare",
@@ -52,9 +51,15 @@ export const DrinkOk = () => {
       const { error } = await supabase
         .from('drink_orders')
         .insert([{
-          ...formData,
+          nume_client: formData.nume_client,
+          telefon_client: formData.telefon_client,
+          adresa_preluare: formData.adresa_preluare,
+          adresa_destinatie: formData.adresa_destinatie,
+          marca_auto: formData.marca_auto,
+          indicativ: formData.indicativ,
+          timp_estimat: formData.timp_estimat,
           status,
-          data_ora: new Date().toISOString(),
+          data_ora: new Date(formData.data_ora).toISOString(),
         }]);
 
       if (error) throw error;
@@ -66,6 +71,7 @@ export const DrinkOk = () => {
 
       // Reset form
       setFormData({
+        data_ora: new Date().toISOString().slice(0, 16),
         nume_client: '',
         telefon_client: '',
         adresa_preluare: '',
@@ -90,12 +96,16 @@ export const DrinkOk = () => {
   return (
     <div className="space-y-6">
       <Card className="p-6">
-        <div className="mb-6 p-4 bg-muted rounded-lg">
-          <div className="text-lg font-semibold text-foreground">{formatTime()}</div>
-          <div className="text-sm text-muted-foreground">{formatDate()}</div>
-        </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md:col-span-2">
+            <Label htmlFor="data_ora">Data și Ora</Label>
+            <Input
+              id="data_ora"
+              type="datetime-local"
+              value={formData.data_ora}
+              onChange={(e) => handleInputChange('data_ora', e.target.value)}
+            />
+          </div>
           <div>
             <Label htmlFor="nume_client">Nume Client</Label>
             <Input
