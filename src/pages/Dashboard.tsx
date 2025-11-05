@@ -8,7 +8,8 @@ import { Pontaj } from '@/components/Pontaj';
 import { Necesar } from '@/components/Necesar';
 import { DrinkOk } from '@/components/DrinkOk';
 import { DrinkHistory } from '@/components/DrinkHistory';
-import { Settings as SettingsIcon, LogOut, FileText, History as HistoryIcon, BarChart3, Wallet, Users, Package, ClipboardCheck, Clock } from 'lucide-react';
+import BazaDeDate from '@/components/BazaDeDate';
+import { Settings as SettingsIcon, LogOut, FileText, History as HistoryIcon, BarChart3, Wallet, Users, Package, ClipboardCheck, Clock, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
@@ -16,7 +17,7 @@ import { useCurrentDateTime } from '@/hooks/useCurrentDateTime';
 import { useAdmin } from '@/hooks/useAdmin';
 import pelicanulLogo from '@/assets/pelicanul-logo.jpg';
 
-type ViewType = 'registru' | 'istoric' | 'rapoarte' | 'drink-ok' | 'istoric-drink' | 'sold-mihai' | 'necesar' | 'pontaj';
+type ViewType = 'registru' | 'istoric' | 'rapoarte' | 'drink-ok' | 'istoric-drink' | 'sold-mihai' | 'baza-date' | 'necesar' | 'pontaj';
 
 const Dashboard = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -32,6 +33,7 @@ const Dashboard = () => {
     { id: 'drink-ok' as ViewType, label: 'DRINK OK', icon: ClipboardCheck, color: 'bg-teal-600 hover:bg-teal-700' },
     { id: 'istoric-drink' as ViewType, label: 'ISTORIC DRINK', icon: Clock, color: 'bg-cyan-600 hover:bg-cyan-700' },
     { id: 'sold-mihai' as ViewType, label: 'SOLD MIHAI', icon: Wallet, color: 'bg-orange-600 hover:bg-orange-700' },
+    { id: 'baza-date' as ViewType, label: 'BAZĂ DE DATE', icon: Database, color: 'bg-indigo-600 hover:bg-indigo-700' },
     { id: 'necesar' as ViewType, label: 'NECESAR', icon: Package, color: 'bg-rose-600 hover:bg-rose-700' },
     { id: 'pontaj' as ViewType, label: 'PONTAJ', icon: Users, color: 'bg-pink-600 hover:bg-pink-700' },
   ];
@@ -50,6 +52,8 @@ const Dashboard = () => {
         return <DrinkHistory />;
       case 'sold-mihai':
         return <LoanPanel />;
+      case 'baza-date':
+        return <BazaDeDate />;
       case 'necesar':
         return <Necesar />;
       case 'pontaj':
