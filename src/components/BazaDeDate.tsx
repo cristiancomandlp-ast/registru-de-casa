@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Users, Building2 } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BazaDeDate = () => {
@@ -61,11 +61,11 @@ const BazaDeDate = () => {
       </Card>
 
       <Card
-        className="bg-lime-600 hover:bg-lime-700 border-2 border-black cursor-pointer transition-all duration-200 active:scale-95"
+        className="bg-blue-600 hover:bg-blue-700 border-2 border-black cursor-pointer transition-all duration-200 active:scale-95"
         onClick={() => setActiveSection('pelicanul-ast')}
       >
         <div className="flex items-center justify-center gap-3 py-8 px-6">
-          <Building2 className="h-6 w-6 text-white" />
+          <Users className="h-6 w-6 text-white" />
           <span className="text-white font-bold text-lg tracking-wide">
             ȘOFERI PELICANUL AST
           </span>
