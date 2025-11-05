@@ -128,10 +128,7 @@ const BazaDeDate = () => {
               </div>
             </div>
             
-            <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" variant="outline" onClick={() => setActiveSection(null)}>
-                Anulează
-              </Button>
+            <div className="flex justify-end pt-4">
               <Button type="submit">
                 Salvează
               </Button>
