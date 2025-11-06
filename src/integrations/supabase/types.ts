@@ -173,6 +173,75 @@ export type Database = {
         }
         Relationships: []
       }
+      soferi_pelicanul_ast: {
+        Row: {
+          administrator: string
+          aut_taxi: string
+          aut_transp: string
+          created_at: string
+          cui: string
+          data_contract: string
+          denumire_societate: string
+          id: string
+          indicativ_alocat: string
+          localitate: string
+          marca_auto: string
+          nr_inreg_onrc: string
+          numar_auto: string
+          numar_contract: string
+          nume_sofer: string
+          sediu_societate: string
+          serie_sasiu: string
+          telefon_administrator: string
+          telefon_sofer: string
+          updated_at: string
+        }
+        Insert: {
+          administrator: string
+          aut_taxi: string
+          aut_transp: string
+          created_at?: string
+          cui: string
+          data_contract: string
+          denumire_societate: string
+          id?: string
+          indicativ_alocat: string
+          localitate: string
+          marca_auto: string
+          nr_inreg_onrc: string
+          numar_auto: string
+          numar_contract: string
+          nume_sofer: string
+          sediu_societate: string
+          serie_sasiu: string
+          telefon_administrator: string
+          telefon_sofer: string
+          updated_at?: string
+        }
+        Update: {
+          administrator?: string
+          aut_taxi?: string
+          aut_transp?: string
+          created_at?: string
+          cui?: string
+          data_contract?: string
+          denumire_societate?: string
+          id?: string
+          indicativ_alocat?: string
+          localitate?: string
+          marca_auto?: string
+          nr_inreg_onrc?: string
+          numar_auto?: string
+          numar_contract?: string
+          nume_sofer?: string
+          sediu_societate?: string
+          serie_sasiu?: string
+          telefon_administrator?: string
+          telefon_sofer?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
