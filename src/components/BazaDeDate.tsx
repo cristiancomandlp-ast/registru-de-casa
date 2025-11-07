@@ -36,15 +36,6 @@ const BazaDeDate = () => {
     if (showForm) {
       return (
         <div>
-          <Button
-            onClick={() => {
-              setShowForm(false);
-              setEditingSofer(null);
-            }}
-            className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
-          >
-            ← Înapoi
-          </Button>
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-6 text-center">
               {editingSofer ? 'EDITEAZĂ ȘOFER' : 'ADAUGĂ ȘOFER NOU'}
@@ -219,15 +210,6 @@ const BazaDeDate = () => {
     if (showForm) {
       return (
         <div>
-            <Button
-            onClick={() => {
-              setShowForm(false);
-              setEditingSoferAst(null);
-            }}
-            className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
-          >
-            ← Înapoi
-          </Button>
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-6 text-center">
               {editingSoferAst ? 'EDITEAZĂ ȘOFER' : 'ADAUGĂ ȘOFER NOU'}

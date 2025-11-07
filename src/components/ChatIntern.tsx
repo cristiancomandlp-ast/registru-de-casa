@@ -215,7 +215,7 @@ export const ChatIntern = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-200px)] bg-white">
-      <Card className="flex-1 flex flex-col p-4 bg-white">
+      <Card className="flex-1 flex flex-col p-4 bg-white border border-black">
         <ScrollArea className="flex-1 pr-4 mb-4" ref={scrollRef}>
           <div className="space-y-4">
             {messages.map((msg) => (
@@ -308,10 +308,10 @@ export const ChatIntern = () => {
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Scrie un mesaj..."
-            className="resize-none"
+            className="resize-none border border-black"
             rows={2}
           />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 border border-black rounded-md p-1">
             <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
               <PopoverTrigger asChild>
                 <Button
