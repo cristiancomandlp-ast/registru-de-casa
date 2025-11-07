@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { useGoogleSheets } from '@/hooks/useGoogleSheets';
 
-export type SoferPelicanulAst = {
+export interface SoferPelicanul {
   id: string;
   numar_contract: string;
   data_contract: string;
@@ -24,30 +24,31 @@ export type SoferPelicanulAst = {
   telefon_sofer: string;
   created_at: string;
   updated_at: string;
-};
+}
 
-export const useSoferiPelicanulAst = () => {
+export const useSoferiPelicanul = () => {
+  const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { saveSoferPelicanulAst } = useGoogleSheets();
+  const { saveSoferPelicanul } = useGoogleSheets();
 
   const { data: soferi, isLoading } = useQuery({
-    queryKey: ['soferi-pelicanul-ast'],
+    queryKey: ['soferi-pelicanul'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('soferi_pelicanul_ast')
+        .from('soferi_pelicanul')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as SoferPelicanulAst[];
+      return data as SoferPelicanul[];
     },
   });
 
   const addSofer = useMutation({
-    mutationFn: async (sofer: Omit<SoferPelicanulAst, 'id' | 'created_at' | 'updated_at'>) => {
+    mutationFn: async (sofer: Omit<SoferPelicanul, 'id' | 'created_at' | 'updated_at'>) => {
       const { data, error } = await supabase
-        .from('soferi_pelicanul_ast')
-        .insert(sofer)
+        .from('soferi_pelicanul')
+        .insert([sofer])
         .select()
         .single();
 
@@ -55,27 +56,29 @@ export const useSoferiPelicanulAst = () => {
       return data;
     },
     onSuccess: async (data) => {
-      queryClient.invalidateQueries({ queryKey: ['soferi-pelicanul-ast'] });
+      queryClient.invalidateQueries({ queryKey: ['soferi-pelicanul'] });
       toast({
         title: 'Succes',
-        description: 'Șofer adăugat cu succes',
+        description: 'Șoferul a fost adăugat cu succes',
       });
-      await saveSoferPelicanulAst(data);
+      await saveSoferPelicanul(data);
     },
     onError: (error) => {
       toast({
         title: 'Eroare',
-        description: `Nu s-a putut adăuga șoferul: ${error.message}`,
+        description: 'Nu s-a putut adăuga șoferul',
         variant: 'destructive',
       });
+      console.error('Error adding sofer:', error);
     },
   });
 
   const updateSofer = useMutation({
-    mutationFn: async ({ id, ...sofer }: Partial<SoferPelicanulAst> & { id: string }) => {
+    mutationFn: async (sofer: SoferPelicanul) => {
+      const { id, created_at, updated_at, ...updateData } = sofer;
       const { data, error } = await supabase
-        .from('soferi_pelicanul_ast')
-        .update(sofer)
+        .from('soferi_pelicanul')
+        .update(updateData)
         .eq('id', id)
         .select()
         .single();
@@ -84,44 +87,46 @@ export const useSoferiPelicanulAst = () => {
       return data;
     },
     onSuccess: async (data) => {
-      queryClient.invalidateQueries({ queryKey: ['soferi-pelicanul-ast'] });
+      queryClient.invalidateQueries({ queryKey: ['soferi-pelicanul'] });
       toast({
         title: 'Succes',
-        description: 'Șofer actualizat cu succes',
+        description: 'Șoferul a fost actualizat cu succes',
       });
-      await saveSoferPelicanulAst(data);
+      await saveSoferPelicanul(data);
     },
     onError: (error) => {
       toast({
         title: 'Eroare',
-        description: `Nu s-a putut actualiza șoferul: ${error.message}`,
+        description: 'Nu s-a putut actualiza șoferul',
         variant: 'destructive',
       });
+      console.error('Error updating sofer:', error);
     },
   });
 
   const deleteSofer = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('soferi_pelicanul_ast')
+        .from('soferi_pelicanul')
         .delete()
         .eq('id', id);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['soferi-pelicanul-ast'] });
+      queryClient.invalidateQueries({ queryKey: ['soferi-pelicanul'] });
       toast({
         title: 'Succes',
-        description: 'Șofer șters cu succes',
+        description: 'Șoferul a fost șters cu succes',
       });
     },
     onError: (error) => {
       toast({
         title: 'Eroare',
-        description: `Nu s-a putut șterge șoferul: ${error.message}`,
+        description: 'Nu s-a putut șterge șoferul',
         variant: 'destructive',
       });
+      console.error('Error deleting sofer:', error);
     },
   });
 

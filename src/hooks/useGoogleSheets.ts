@@ -65,9 +65,25 @@ export const useGoogleSheets = () => {
     });
   };
 
+  const saveSoferPelicanul = async (sofer: any) => {
+    return await sendToGoogleSheets({
+      type: 'sofer_pelicanul',
+      data: sofer,
+    });
+  };
+
+  const saveSoferPelicanulAst = async (sofer: any) => {
+    return await sendToGoogleSheets({
+      type: 'sofer_pelicanul_ast',
+      data: sofer,
+    });
+  };
+
   return {
     saveTransaction,
     saveShift,
+    saveSoferPelicanul,
+    saveSoferPelicanulAst,
     isLoading,
   };
 };

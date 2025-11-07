@@ -3,8 +3,10 @@ import { Card } from '@/components/ui/card';
 import { Users, Phone, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSoferiPelicanulAst, SoferPelicanulAst } from '@/hooks/useSoferiPelicanulAst';
+import { useSoferiPelicanul, SoferPelicanul } from '@/hooks/useSoferiPelicanul';
 import { useAdmin } from '@/hooks/useAdmin';
 import SoferPelicanulAstForm from './SoferPelicanulAstForm';
+import SoferPelicanulForm from './SoferPelicanulForm';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,68 +21,18 @@ import {
 const BazaDeDate = () => {
   const [activeSection, setActiveSection] = useState<'pelicanul' | 'pelicanul-ast' | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [editingSofer, setEditingSofer] = useState<SoferPelicanulAst | null>(null);
+  const [editingSoferAst, setEditingSoferAst] = useState<SoferPelicanulAst | null>(null);
+  const [editingSofer, setEditingSofer] = useState<SoferPelicanul | null>(null);
   const [deletingSoferId, setDeletingSoferId] = useState<string | null>(null);
-  const { soferi, isLoading, addSofer, updateSofer, deleteSofer } = useSoferiPelicanulAst();
+  const { soferi: soferiAst, isLoading: isLoadingAst, addSofer: addSoferAst, updateSofer: updateSoferAst, deleteSofer: deleteSoferAst } = useSoferiPelicanulAst();
+  const { soferi, isLoading, addSofer, updateSofer, deleteSofer } = useSoferiPelicanul();
   const { isAdmin } = useAdmin();
-
-  if (activeSection === 'pelicanul') {
-    return (
-      <div>
-        <Button
-          variant="outline"
-          onClick={() => setActiveSection(null)}
-          className="mb-4"
-        >
-          ← Înapoi
-        </Button>
-        <Card className="p-6">
-          <h2 className="text-2xl font-bold mb-6 text-center">ȘOFERI PELICANUL</h2>
-          <div className="text-center py-8 text-gray-600">
-            Secțiunea ȘOFERI PELICANUL - în curând
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
-  const handleAddSofer = (soferData: Omit<SoferPelicanulAst, 'id' | 'created_at' | 'updated_at'>) => {
-    addSofer.mutate(soferData, {
-      onSuccess: () => {
-        setShowForm(false);
-      },
-    });
-  };
-
-  const handleUpdateSofer = (soferData: Omit<SoferPelicanulAst, 'id' | 'created_at' | 'updated_at'>) => {
-    if (editingSofer) {
-      updateSofer.mutate(
-        { id: editingSofer.id, ...soferData },
-        {
-          onSuccess: () => {
-            setShowForm(false);
-            setEditingSofer(null);
-          },
-        }
-      );
-    }
-  };
-
-  const handleDeleteSofer = () => {
-    if (deletingSoferId) {
-      deleteSofer.mutate(deletingSoferId, {
-        onSuccess: () => {
-          setDeletingSoferId(null);
-        },
-      });
-    }
-  };
 
   const handlePhoneCall = (phoneNumber: string) => {
     window.location.href = `tel:${phoneNumber}`;
   };
 
-  if (activeSection === 'pelicanul-ast') {
+  if (activeSection === 'pelicanul') {
     if (showForm) {
       return (
         <div>
@@ -98,9 +50,27 @@ const BazaDeDate = () => {
             <h2 className="text-2xl font-bold mb-6 text-center">
               {editingSofer ? 'EDITEAZĂ ȘOFER' : 'ADAUGĂ ȘOFER NOU'}
             </h2>
-            <SoferPelicanulAstForm
+            <SoferPelicanulForm
               sofer={editingSofer || undefined}
-              onSubmit={editingSofer ? handleUpdateSofer : handleAddSofer}
+              onSubmit={(soferData) => {
+                if (editingSofer) {
+                  updateSofer.mutate(
+                    { id: editingSofer.id, ...soferData } as SoferPelicanul,
+                    {
+                      onSuccess: () => {
+                        setShowForm(false);
+                        setEditingSofer(null);
+                      },
+                    }
+                  );
+                } else {
+                  addSofer.mutate(soferData, {
+                    onSuccess: () => {
+                      setShowForm(false);
+                    },
+                  });
+                }
+              }}
               onCancel={() => {
                 setShowForm(false);
                 setEditingSofer(null);
@@ -122,7 +92,7 @@ const BazaDeDate = () => {
         </Button>
         <Card className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">ȘOFERI PELICANUL AST</h2>
+            <h2 className="text-2xl font-bold">ȘOFERI PELICANUL</h2>
             <Button onClick={() => setShowForm(true)}>
               ADAUGĂ ȘOFER
             </Button>
@@ -230,7 +200,200 @@ const BazaDeDate = () => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Anulează</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteSofer}>Șterge</AlertDialogAction>
+              <AlertDialogAction onClick={() => {
+                if (deletingSoferId) {
+                  deleteSofer.mutate(deletingSoferId, {
+                    onSuccess: () => {
+                      setDeletingSoferId(null);
+                    },
+                  });
+                }
+              }}>Șterge</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    );
+  }
+
+
+  if (activeSection === 'pelicanul-ast') {
+    if (showForm) {
+      return (
+        <div>
+            <Button
+            variant="outline"
+            onClick={() => {
+              setShowForm(false);
+              setEditingSoferAst(null);
+            }}
+            className="mb-4"
+          >
+            ← Înapoi
+          </Button>
+          <Card className="p-6">
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              {editingSoferAst ? 'EDITEAZĂ ȘOFER' : 'ADAUGĂ ȘOFER NOU'}
+            </h2>
+            <SoferPelicanulAstForm
+              sofer={editingSoferAst || undefined}
+              onSubmit={(soferData) => {
+                if (editingSoferAst) {
+                  updateSoferAst.mutate(
+                    { id: editingSoferAst.id, ...soferData } as SoferPelicanulAst,
+                    {
+                      onSuccess: () => {
+                        setShowForm(false);
+                        setEditingSoferAst(null);
+                      },
+                    }
+                  );
+                } else {
+                  addSoferAst.mutate(soferData, {
+                    onSuccess: () => {
+                      setShowForm(false);
+                    },
+                  });
+                }
+              }}
+              onCancel={() => {
+                setShowForm(false);
+                setEditingSoferAst(null);
+              }}
+            />
+          </Card>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <Button
+          variant="outline"
+          onClick={() => setActiveSection(null)}
+          className="mb-4"
+        >
+          ← Înapoi
+        </Button>
+        <Card className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">ȘOFERI PELICANUL AST</h2>
+            <Button onClick={() => setShowForm(true)}>
+              ADAUGĂ ȘOFER
+            </Button>
+          </div>
+
+          {isLoadingAst ? (
+            <div className="text-center py-8">Se încarcă...</div>
+          ) : soferiAst && soferiAst.length > 0 ? (
+            <div className="space-y-4">
+              {soferiAst.map((sofer) => (
+                <Card key={sofer.id} className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Indicativ</p>
+                      <p className="font-medium">{sofer.indicativ_alocat}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Nume Șofer</p>
+                      <p className="font-medium">{sofer.nume_sofer}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Telefon Șofer</p>
+                      <Button
+                        variant="link"
+                        className="p-0 h-auto font-medium"
+                        onClick={() => handlePhoneCall(sofer.telefon_sofer)}
+                      >
+                        <Phone className="h-4 w-4 mr-1" />
+                        {sofer.telefon_sofer}
+                      </Button>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Denumire Societate</p>
+                      <p className="font-medium">{sofer.denumire_societate}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Marca Auto</p>
+                      <p className="font-medium">{sofer.marca_auto}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Număr Auto</p>
+                      <p className="font-medium">{sofer.numar_auto}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Administrator</p>
+                      <p className="font-medium">{sofer.administrator}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Telefon Administrator</p>
+                      <Button
+                        variant="link"
+                        className="p-0 h-auto font-medium"
+                        onClick={() => handlePhoneCall(sofer.telefon_administrator)}
+                      >
+                        <Phone className="h-4 w-4 mr-1" />
+                        {sofer.telefon_administrator}
+                      </Button>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-muted-foreground">Localitate</p>
+                      <p className="font-medium">{sofer.localitate}</p>
+                    </div>
+                  </div>
+
+                  {isAdmin && (
+                    <div className="flex gap-2 mt-4 pt-4 border-t">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setEditingSoferAst(sofer);
+                          setShowForm(true);
+                        }}
+                      >
+                        <Edit className="h-4 w-4 mr-1" />
+                        Editează
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setDeletingSoferId(sofer.id)}
+                      >
+                        <Trash2 className="h-4 w-4 mr-1" />
+                        Șterge
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              Nu există șoferi adăugați. Apasă butonul "ADAUGĂ ȘOFER" pentru a adăuga primul șofer.
+            </div>
+          )}
+        </Card>
+
+        <AlertDialog open={!!deletingSoferId} onOpenChange={() => setDeletingSoferId(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
+              <AlertDialogDescription>
+                Sigur doriți să ștergeți acest șofer? Această acțiune nu poate fi anulată.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Anulează</AlertDialogCancel>
+              <AlertDialogAction onClick={() => {
+                if (deletingSoferId) {
+                  deleteSoferAst.mutate(deletingSoferId, {
+                    onSuccess: () => {
+                      setDeletingSoferId(null);
+                    },
+                  });
+                }
+              }}>Șterge</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
