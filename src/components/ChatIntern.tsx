@@ -302,39 +302,36 @@ export const ChatIntern = () => {
           </div>
         </ScrollArea>
 
-        <div className="space-y-2">
-          <div className="flex justify-end">
+        <div className="flex gap-2">
+          <Textarea
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Scrie un mesaj..."
+            className="resize-none"
+            rows={2}
+          />
+          <div className="flex flex-col gap-2">
             <Popover open={showEmojiPicker} onOpenChange={setShowEmojiPicker}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  size="sm"
-                  className="gap-2"
+                  size="icon"
+                  className="h-10 w-10"
                 >
                   <Smile className="h-4 w-4" />
-                  Emoji
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-full p-0 border-0" align="end">
-                <EmojiPicker onEmojiClick={handleEmojiClick} width={300} />
+              <PopoverContent className="w-auto p-0 border-0" align="end">
+                <EmojiPicker onEmojiClick={handleEmojiClick} width={280} height={350} />
               </PopoverContent>
             </Popover>
-          </div>
-          
-          <div className="flex gap-2">
-            <Textarea
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Scrie un mesaj..."
-              className="resize-none"
-              rows={2}
-            />
+            
             <Button
               onClick={handleSendMessage}
               disabled={loading || !newMessage.trim()}
               size="icon"
-              className="self-end"
+              className="h-10 w-10"
             >
               <Send className="h-4 w-4" />
             </Button>

@@ -37,12 +37,11 @@ const BazaDeDate = () => {
       return (
         <div>
           <Button
-            variant="outline"
             onClick={() => {
               setShowForm(false);
               setEditingSofer(null);
             }}
-            className="mb-4"
+            className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
           >
             ← Înapoi
           </Button>
@@ -84,9 +83,8 @@ const BazaDeDate = () => {
     return (
       <div>
         <Button
-          variant="outline"
           onClick={() => setActiveSection(null)}
-          className="mb-4"
+          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
         >
           ← Înapoi
         </Button>
@@ -222,12 +220,11 @@ const BazaDeDate = () => {
       return (
         <div>
             <Button
-            variant="outline"
             onClick={() => {
               setShowForm(false);
               setEditingSoferAst(null);
             }}
-            className="mb-4"
+            className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
           >
             ← Înapoi
           </Button>
@@ -269,9 +266,8 @@ const BazaDeDate = () => {
     return (
       <div>
         <Button
-          variant="outline"
           onClick={() => setActiveSection(null)}
-          className="mb-4"
+          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
         >
           ← Înapoi
         </Button>

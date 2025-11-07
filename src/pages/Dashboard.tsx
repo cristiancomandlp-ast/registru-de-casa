@@ -112,9 +112,8 @@ const Dashboard = () => {
         ) : activeView ? (
           <div>
             <Button
-              variant="outline"
               onClick={() => setActiveView(null)}
-              className="mb-4"
+              className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
             >
               ← Înapoi
             </Button>
