@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useUserDisplayName } from '@/hooks/useUserDisplayName';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
@@ -14,12 +15,14 @@ interface ChatMessage {
   id: string;
   user_id: string;
   user_email: string;
+  display_name: string;
   message: string;
   created_at: string;
 }
 
 export const ChatIntern = () => {
   const { user } = useAuth();
+  const { displayName } = useUserDisplayName();
   const { toast } = useToast();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -86,6 +89,7 @@ export const ChatIntern = () => {
       .insert({
         user_id: user.id,
         user_email: user.email || 'Utilizator',
+        display_name: displayName,
         message: newMessage.trim(),
       });
 
@@ -131,7 +135,7 @@ export const ChatIntern = () => {
                       : 'bg-muted'
                   }`}
                 >
-                  <p className="text-xs font-semibold mb-1">{msg.user_email}</p>
+                  <p className="text-xs font-semibold mb-1">{msg.display_name}</p>
                   <p className="text-sm whitespace-pre-wrap break-words">{msg.message}</p>
                   <p className="text-xs opacity-70 mt-1">
                     {formatDistanceToNow(new Date(msg.created_at), {

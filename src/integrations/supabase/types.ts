@@ -17,6 +17,7 @@ export type Database = {
       chat_messages: {
         Row: {
           created_at: string
+          display_name: string
           id: string
           message: string
           user_email: string
@@ -24,6 +25,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          display_name?: string
           id?: string
           message: string
           user_email: string
@@ -31,6 +33,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          display_name?: string
           id?: string
           message?: string
           user_email?: string
