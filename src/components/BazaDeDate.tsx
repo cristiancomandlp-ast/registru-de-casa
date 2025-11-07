@@ -33,9 +33,20 @@ const BazaDeDate = () => {
   };
 
   if (activeSection === 'pelicanul') {
-    if (showForm) {
-      return (
-        <div>
+    return (
+      <div>
+        <Button
+          onClick={() => {
+            setActiveSection(null);
+            setShowForm(false);
+            setEditingSofer(null);
+          }}
+          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
+        >
+          ← Înapoi
+        </Button>
+        
+        {showForm ? (
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-6 text-center">
               {editingSofer ? 'EDITEAZĂ ȘOFER' : 'ADAUGĂ ȘOFER NOU'}
@@ -67,117 +78,107 @@ const BazaDeDate = () => {
               }}
             />
           </Card>
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        <Button
-          onClick={() => setActiveSection(null)}
-          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
-        >
-          ← Înapoi
-        </Button>
-        <Card className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">ȘOFERI PELICANUL</h2>
-            <Button onClick={() => setShowForm(true)}>
-              ADAUGĂ ȘOFER
-            </Button>
-          </div>
-
-          {isLoading ? (
-            <div className="text-center py-8">Se încarcă...</div>
-          ) : soferi && soferi.length > 0 ? (
-            <div className="space-y-4">
-              {soferi.map((sofer) => (
-                <Card key={sofer.id} className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Indicativ</p>
-                      <p className="font-medium">{sofer.indicativ_alocat}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Nume Șofer</p>
-                      <p className="font-medium">{sofer.nume_sofer}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Telefon Șofer</p>
-                      <Button
-                        variant="link"
-                        className="p-0 h-auto font-medium"
-                        onClick={() => handlePhoneCall(sofer.telefon_sofer)}
-                      >
-                        <Phone className="h-4 w-4 mr-1" />
-                        {sofer.telefon_sofer}
-                      </Button>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Denumire Societate</p>
-                      <p className="font-medium">{sofer.denumire_societate}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Marca Auto</p>
-                      <p className="font-medium">{sofer.marca_auto}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Număr Auto</p>
-                      <p className="font-medium">{sofer.numar_auto}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Administrator</p>
-                      <p className="font-medium">{sofer.administrator}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Telefon Administrator</p>
-                      <Button
-                        variant="link"
-                        className="p-0 h-auto font-medium"
-                        onClick={() => handlePhoneCall(sofer.telefon_administrator)}
-                      >
-                        <Phone className="h-4 w-4 mr-1" />
-                        {sofer.telefon_administrator}
-                      </Button>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Localitate</p>
-                      <p className="font-medium">{sofer.localitate}</p>
-                    </div>
-                  </div>
-
-                  {isAdmin && (
-                    <div className="flex gap-2 mt-4 pt-4 border-t">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setEditingSofer(sofer);
-                          setShowForm(true);
-                        }}
-                      >
-                        <Edit className="h-4 w-4 mr-1" />
-                        Editează
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => setDeletingSoferId(sofer.id)}
-                      >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Șterge
-                      </Button>
-                    </div>
-                  )}
-                </Card>
-              ))}
+        ) : (
+          <Card className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">ȘOFERI PELICANUL</h2>
+              <Button onClick={() => setShowForm(true)}>
+                ADAUGĂ ȘOFER
+              </Button>
             </div>
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              Nu există șoferi adăugați. Apasă butonul "ADAUGĂ ȘOFER" pentru a adăuga primul șofer.
-            </div>
-          )}
-        </Card>
+
+            {isLoading ? (
+              <div className="text-center py-8">Se încarcă...</div>
+            ) : soferi && soferi.length > 0 ? (
+              <div className="space-y-4">
+                {soferi.map((sofer) => (
+                  <Card key={sofer.id} className="p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Indicativ</p>
+                        <p className="font-medium">{sofer.indicativ_alocat}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Nume Șofer</p>
+                        <p className="font-medium">{sofer.nume_sofer}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Telefon Șofer</p>
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto font-medium"
+                          onClick={() => handlePhoneCall(sofer.telefon_sofer)}
+                        >
+                          <Phone className="h-4 w-4 mr-1" />
+                          {sofer.telefon_sofer}
+                        </Button>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Denumire Societate</p>
+                        <p className="font-medium">{sofer.denumire_societate}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Marca Auto</p>
+                        <p className="font-medium">{sofer.marca_auto}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Număr Auto</p>
+                        <p className="font-medium">{sofer.numar_auto}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Administrator</p>
+                        <p className="font-medium">{sofer.administrator}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Telefon Administrator</p>
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto font-medium"
+                          onClick={() => handlePhoneCall(sofer.telefon_administrator)}
+                        >
+                          <Phone className="h-4 w-4 mr-1" />
+                          {sofer.telefon_administrator}
+                        </Button>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Localitate</p>
+                        <p className="font-medium">{sofer.localitate}</p>
+                      </div>
+                    </div>
+
+                    {isAdmin && (
+                      <div className="flex gap-2 mt-4 pt-4 border-t">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setEditingSofer(sofer);
+                            setShowForm(true);
+                          }}
+                        >
+                          <Edit className="h-4 w-4 mr-1" />
+                          Editează
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setDeletingSoferId(sofer.id)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Șterge
+                        </Button>
+                      </div>
+                    )}
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                Nu există șoferi adăugați. Apasă butonul "ADAUGĂ ȘOFER" pentru a adăuga primul șofer.
+              </div>
+            )}
+          </Card>
+        )}
 
         <AlertDialog open={!!deletingSoferId} onOpenChange={() => setDeletingSoferId(null)}>
           <AlertDialogContent>
@@ -207,9 +208,20 @@ const BazaDeDate = () => {
 
 
   if (activeSection === 'pelicanul-ast') {
-    if (showForm) {
-      return (
-        <div>
+    return (
+      <div>
+        <Button
+          onClick={() => {
+            setActiveSection(null);
+            setShowForm(false);
+            setEditingSoferAst(null);
+          }}
+          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
+        >
+          ← Înapoi
+        </Button>
+        
+        {showForm ? (
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-6 text-center">
               {editingSoferAst ? 'EDITEAZĂ ȘOFER' : 'ADAUGĂ ȘOFER NOU'}
@@ -241,117 +253,107 @@ const BazaDeDate = () => {
               }}
             />
           </Card>
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        <Button
-          onClick={() => setActiveSection(null)}
-          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
-        >
-          ← Înapoi
-        </Button>
-        <Card className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">ȘOFERI PELICANUL AST</h2>
-            <Button onClick={() => setShowForm(true)}>
-              ADAUGĂ ȘOFER
-            </Button>
-          </div>
-
-          {isLoadingAst ? (
-            <div className="text-center py-8">Se încarcă...</div>
-          ) : soferiAst && soferiAst.length > 0 ? (
-            <div className="space-y-4">
-              {soferiAst.map((sofer) => (
-                <Card key={sofer.id} className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Indicativ</p>
-                      <p className="font-medium">{sofer.indicativ_alocat}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Nume Șofer</p>
-                      <p className="font-medium">{sofer.nume_sofer}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Telefon Șofer</p>
-                      <Button
-                        variant="link"
-                        className="p-0 h-auto font-medium"
-                        onClick={() => handlePhoneCall(sofer.telefon_sofer)}
-                      >
-                        <Phone className="h-4 w-4 mr-1" />
-                        {sofer.telefon_sofer}
-                      </Button>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Denumire Societate</p>
-                      <p className="font-medium">{sofer.denumire_societate}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Marca Auto</p>
-                      <p className="font-medium">{sofer.marca_auto}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Număr Auto</p>
-                      <p className="font-medium">{sofer.numar_auto}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Administrator</p>
-                      <p className="font-medium">{sofer.administrator}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Telefon Administrator</p>
-                      <Button
-                        variant="link"
-                        className="p-0 h-auto font-medium"
-                        onClick={() => handlePhoneCall(sofer.telefon_administrator)}
-                      >
-                        <Phone className="h-4 w-4 mr-1" />
-                        {sofer.telefon_administrator}
-                      </Button>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-muted-foreground">Localitate</p>
-                      <p className="font-medium">{sofer.localitate}</p>
-                    </div>
-                  </div>
-
-                  {isAdmin && (
-                    <div className="flex gap-2 mt-4 pt-4 border-t">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setEditingSoferAst(sofer);
-                          setShowForm(true);
-                        }}
-                      >
-                        <Edit className="h-4 w-4 mr-1" />
-                        Editează
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => setDeletingSoferId(sofer.id)}
-                      >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Șterge
-                      </Button>
-                    </div>
-                  )}
-                </Card>
-              ))}
+        ) : (
+          <Card className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">ȘOFERI PELICANUL AST</h2>
+              <Button onClick={() => setShowForm(true)}>
+                ADAUGĂ ȘOFER
+              </Button>
             </div>
-          ) : (
-            <div className="text-center py-8 text-muted-foreground">
-              Nu există șoferi adăugați. Apasă butonul "ADAUGĂ ȘOFER" pentru a adăuga primul șofer.
-            </div>
-          )}
-        </Card>
+
+            {isLoadingAst ? (
+              <div className="text-center py-8">Se încarcă...</div>
+            ) : soferiAst && soferiAst.length > 0 ? (
+              <div className="space-y-4">
+                {soferiAst.map((sofer) => (
+                  <Card key={sofer.id} className="p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Indicativ</p>
+                        <p className="font-medium">{sofer.indicativ_alocat}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Nume Șofer</p>
+                        <p className="font-medium">{sofer.nume_sofer}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Telefon Șofer</p>
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto font-medium"
+                          onClick={() => handlePhoneCall(sofer.telefon_sofer)}
+                        >
+                          <Phone className="h-4 w-4 mr-1" />
+                          {sofer.telefon_sofer}
+                        </Button>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Denumire Societate</p>
+                        <p className="font-medium">{sofer.denumire_societate}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Marca Auto</p>
+                        <p className="font-medium">{sofer.marca_auto}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Număr Auto</p>
+                        <p className="font-medium">{sofer.numar_auto}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Administrator</p>
+                        <p className="font-medium">{sofer.administrator}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Telefon Administrator</p>
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto font-medium"
+                          onClick={() => handlePhoneCall(sofer.telefon_administrator)}
+                        >
+                          <Phone className="h-4 w-4 mr-1" />
+                          {sofer.telefon_administrator}
+                        </Button>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Localitate</p>
+                        <p className="font-medium">{sofer.localitate}</p>
+                      </div>
+                    </div>
+
+                    {isAdmin && (
+                      <div className="flex gap-2 mt-4 pt-4 border-t">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setEditingSoferAst(sofer);
+                            setShowForm(true);
+                          }}
+                        >
+                          <Edit className="h-4 w-4 mr-1" />
+                          Editează
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setDeletingSoferId(sofer.id)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Șterge
+                        </Button>
+                      </div>
+                    )}
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                Nu există șoferi adăugați. Apasă butonul "ADAUGĂ ȘOFER" pentru a adăuga primul șofer.
+              </div>
+            )}
+          </Card>
+        )}
 
         <AlertDialog open={!!deletingSoferId} onOpenChange={() => setDeletingSoferId(null)}>
           <AlertDialogContent>
