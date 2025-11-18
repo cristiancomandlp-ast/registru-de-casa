@@ -66,6 +66,14 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="container max-w-4xl mx-auto p-4 md:p-6">
+        {activeView && (
+          <Button
+            onClick={() => setActiveView(null)}
+            className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
+          >
+            ← Înapoi
+          </Button>
+        )}
         <div className="mb-6 flex flex-col gap-4">
           <div className="flex justify-between items-start">
             <div className="text-left">
