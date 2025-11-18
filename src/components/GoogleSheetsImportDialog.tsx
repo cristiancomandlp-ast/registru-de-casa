@@ -56,12 +56,13 @@ export const GoogleSheetsImportDialog = ({
     return data.map(row => ({
       indicativ_alocat: row['INDICATIV'] || '',
       numar_auto: row['NUMAR AUTO'] || '',
-      status: row['STATUS'] || '',
+      status: row['STATUS'] || 'ACTIV',
       denumire_societate: row['FIRMA'] || '',
       administrator: row['ADMINISTRATOR'] || '',
       telefon_administrator: row['TEL. ADMINISTRATOR'] || '',
       nume_sofer: row['NUME SOFER'] || '',
       telefon_sofer: row['TELEFON'] || '',
+      detalii: row['DETALII'] || '',
     }));
   };
 
@@ -165,7 +166,7 @@ export const GoogleSheetsImportDialog = ({
               <li>Lipește URL-ul mai sus</li>
             </ol>
             <p className="text-muted-foreground mt-2">
-              Foaia trebuie să conțină coloane cu numele: INDICATIV, NUMAR AUTO, STATUS, FIRMA, ADMINISTRATOR, TEL. ADMINISTRATOR, NUME SOFER, TELEFON
+              Foaia trebuie să conțină coloane cu numele: INDICATIV, NUMAR AUTO, STATUS, FIRMA, ADMINISTRATOR, TEL. ADMINISTRATOR, NUME SOFER, TELEFON, DETALII (opțional)
             </p>
           </div>
         </div>
