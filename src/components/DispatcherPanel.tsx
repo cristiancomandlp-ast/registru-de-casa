@@ -147,7 +147,7 @@ export const DispatcherPanel = ({ onBack }: DispatcherPanelProps) => {
     return (
       <div className="space-y-4">
         <Button 
-          onClick={onBack} 
+          onClick={() => setActiveSubView('main')} 
           variant="destructive"
           className="mb-4"
         >
@@ -163,7 +163,7 @@ export const DispatcherPanel = ({ onBack }: DispatcherPanelProps) => {
     return (
       <div className="space-y-4">
         <Button 
-          onClick={onBack} 
+          onClick={() => setActiveSubView('main')} 
           variant="destructive"
           className="mb-4"
         >
