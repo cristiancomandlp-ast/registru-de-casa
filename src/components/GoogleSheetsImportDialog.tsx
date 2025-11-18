@@ -54,23 +54,24 @@ export const GoogleSheetsImportDialog = ({
 
   const mapToTableStructure = (data: any[]): any[] => {
     return data.map(row => ({
-      numar_contract: row['Numar Contract'] || row['numar_contract'] || '',
-      data_contract: row['Data Contract'] || row['data_contract'] || '',
-      nume_sofer: row['Nume Sofer'] || row['nume_sofer'] || '',
-      telefon_sofer: row['Telefon Sofer'] || row['telefon_sofer'] || '',
-      cui: row['CUI'] || row['cui'] || '',
-      nr_inreg_onrc: row['Nr Inreg ONRC'] || row['nr_inreg_onrc'] || '',
-      denumire_societate: row['Denumire Societate'] || row['denumire_societate'] || '',
-      sediu_societate: row['Sediu Societate'] || row['sediu_societate'] || '',
-      localitate: row['Localitate'] || row['localitate'] || '',
-      administrator: row['Administrator'] || row['administrator'] || '',
-      telefon_administrator: row['Telefon Administrator'] || row['telefon_administrator'] || '',
-      aut_taxi: row['Aut Taxi'] || row['aut_taxi'] || '',
-      aut_transp: row['Aut Transp'] || row['aut_transp'] || '',
-      marca_auto: row['Marca Auto'] || row['marca_auto'] || '',
-      numar_auto: row['Numar Auto'] || row['numar_auto'] || '',
-      serie_sasiu: row['Serie Sasiu'] || row['serie_sasiu'] || '',
-      indicativ_alocat: row['Indicativ Alocat'] || row['indicativ_alocat'] || '',
+      indicativ_alocat: row['INDICATIV'] || row['INDICATIV AUTO'] || row['indicativ_alocat'] || '',
+      numar_auto: row['NUMAR AUTO'] || row['NUMAR INMATRICULARE'] || row['numar_auto'] || '',
+      status: row['STATUS'] || row['status'] || '',
+      denumire_societate: row['FIRMA'] || row['denumire_societate'] || '',
+      administrator: row['ADMINISTRATOR'] || row['administrator'] || '',
+      telefon_administrator: row['TEL. ADMINISTRATOR'] || row['TELEFON ADMINISTRATOR'] || row['telefon_administrator'] || '',
+      nume_sofer: row['NUME SOFER'] || row['nume_sofer'] || '',
+      telefon_sofer: row['TELEFON'] || row['TELEFON SOFER'] || row['telefon_sofer'] || '',
+      numar_contract: '',
+      data_contract: '2024-01-01',
+      cui: '',
+      nr_inreg_onrc: '',
+      sediu_societate: '',
+      localitate: '',
+      aut_taxi: '',
+      aut_transp: '',
+      marca_auto: '',
+      serie_sasiu: '',
     }));
   };
 
@@ -174,10 +175,9 @@ export const GoogleSheetsImportDialog = ({
               <li>Lipește URL-ul mai sus</li>
             </ol>
             <p className="text-muted-foreground mt-2">
-              Foaia trebuie să conțină coloane cu numele: Numar Contract, Data Contract, Nume Sofer, 
-              Telefon Sofer, CUI, Nr Inreg ONRC, Denumire Societate, Sediu Societate, Localitate, 
-              Administrator, Telefon Administrator, Aut Taxi, Aut Transp, Marca Auto, Numar Auto, 
-              Serie Sasiu, Indicativ Alocat
+              Foaia trebuie să conțină coloane cu numele: INDICATIV (sau INDICATIV AUTO), 
+              NUMAR AUTO (sau NUMAR INMATRICULARE), STATUS, FIRMA, ADMINISTRATOR, 
+              TEL. ADMINISTRATOR (sau TELEFON ADMINISTRATOR), NUME SOFER, TELEFON (sau TELEFON SOFER)
             </p>
           </div>
         </div>

@@ -251,66 +251,69 @@ export type Database = {
       soferi_pelicanul: {
         Row: {
           administrator: string
-          aut_taxi: string
-          aut_transp: string
+          aut_taxi: string | null
+          aut_transp: string | null
           created_at: string
-          cui: string
-          data_contract: string
+          cui: string | null
+          data_contract: string | null
           denumire_societate: string
           id: string
           indicativ_alocat: string
-          localitate: string
-          marca_auto: string
-          nr_inreg_onrc: string
+          localitate: string | null
+          marca_auto: string | null
+          nr_inreg_onrc: string | null
           numar_auto: string
-          numar_contract: string
+          numar_contract: string | null
           nume_sofer: string
-          sediu_societate: string
-          serie_sasiu: string
+          sediu_societate: string | null
+          serie_sasiu: string | null
+          status: string | null
           telefon_administrator: string
           telefon_sofer: string
           updated_at: string
         }
         Insert: {
           administrator: string
-          aut_taxi: string
-          aut_transp: string
+          aut_taxi?: string | null
+          aut_transp?: string | null
           created_at?: string
-          cui: string
-          data_contract: string
+          cui?: string | null
+          data_contract?: string | null
           denumire_societate: string
           id?: string
           indicativ_alocat: string
-          localitate: string
-          marca_auto: string
-          nr_inreg_onrc: string
+          localitate?: string | null
+          marca_auto?: string | null
+          nr_inreg_onrc?: string | null
           numar_auto: string
-          numar_contract: string
+          numar_contract?: string | null
           nume_sofer: string
-          sediu_societate: string
-          serie_sasiu: string
+          sediu_societate?: string | null
+          serie_sasiu?: string | null
+          status?: string | null
           telefon_administrator: string
           telefon_sofer: string
           updated_at?: string
         }
         Update: {
           administrator?: string
-          aut_taxi?: string
-          aut_transp?: string
+          aut_taxi?: string | null
+          aut_transp?: string | null
           created_at?: string
-          cui?: string
-          data_contract?: string
+          cui?: string | null
+          data_contract?: string | null
           denumire_societate?: string
           id?: string
           indicativ_alocat?: string
-          localitate?: string
-          marca_auto?: string
-          nr_inreg_onrc?: string
+          localitate?: string | null
+          marca_auto?: string | null
+          nr_inreg_onrc?: string | null
           numar_auto?: string
-          numar_contract?: string
+          numar_contract?: string | null
           nume_sofer?: string
-          sediu_societate?: string
-          serie_sasiu?: string
+          sediu_societate?: string | null
+          serie_sasiu?: string | null
+          status?: string | null
           telefon_administrator?: string
           telefon_sofer?: string
           updated_at?: string

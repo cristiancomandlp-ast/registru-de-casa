@@ -5,23 +5,24 @@ import { useGoogleSheets } from '@/hooks/useGoogleSheets';
 
 export interface SoferPelicanul {
   id: string;
-  numar_contract: string;
-  data_contract: string;
   indicativ_alocat: string;
+  numar_auto: string;
+  status: string;
   denumire_societate: string;
-  cui: string;
-  nr_inreg_onrc: string;
-  sediu_societate: string;
-  localitate: string;
   administrator: string;
   telefon_administrator: string;
-  aut_taxi: string;
-  aut_transp: string;
-  marca_auto: string;
-  numar_auto: string;
-  serie_sasiu: string;
   nume_sofer: string;
   telefon_sofer: string;
+  numar_contract?: string;
+  data_contract?: string;
+  cui?: string;
+  nr_inreg_onrc?: string;
+  sediu_societate?: string;
+  localitate?: string;
+  aut_taxi?: string;
+  aut_transp?: string;
+  marca_auto?: string;
+  serie_sasiu?: string;
   created_at: string;
   updated_at: string;
 }
