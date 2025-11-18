@@ -7,6 +7,7 @@ import { useSoferiPelicanul, SoferPelicanul } from '@/hooks/useSoferiPelicanul';
 import { useAdmin } from '@/hooks/useAdmin';
 import SoferPelicanulAstForm from './SoferPelicanulAstForm';
 import SoferPelicanulForm from './SoferPelicanulForm';
+import { GoogleSheetsImportDialog } from './GoogleSheetsImportDialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,7 @@ import {
 const BazaDeDate = () => {
   const [activeSection, setActiveSection] = useState<'pelicanul' | 'pelicanul-ast' | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [showImportDialog, setShowImportDialog] = useState(false);
   const [editingSoferAst, setEditingSoferAst] = useState<SoferPelicanulAst | null>(null);
   const [editingSofer, setEditingSofer] = useState<SoferPelicanul | null>(null);
   const [deletingSoferId, setDeletingSoferId] = useState<string | null>(null);
@@ -85,10 +87,7 @@ const BazaDeDate = () => {
               <div className="flex gap-2">
                 <Button 
                   variant="outline" 
-                  onClick={() => {
-                    // TODO: Implement Google Sheets import
-                    alert('Funcția de import va fi implementată');
-                  }}
+                  onClick={() => setShowImportDialog(true)}
                 >
                   <Upload className="h-4 w-4 mr-2" />
                   IMPORTĂ FOAIE DE CALCUL
@@ -214,6 +213,15 @@ const BazaDeDate = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <GoogleSheetsImportDialog
+          open={showImportDialog}
+          onOpenChange={setShowImportDialog}
+          tableName="soferi_pelicanul"
+          onSuccess={() => {
+            // Data will refresh automatically via queryClient.invalidateQueries
+          }}
+        />
       </div>
     );
   }
@@ -269,9 +277,18 @@ const BazaDeDate = () => {
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">ȘOFERI PELICANUL AST</h2>
-              <Button onClick={() => setShowForm(true)}>
-                ADAUGĂ ȘOFER
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowImportDialog(true)}
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  IMPORTĂ FOAIE DE CALCUL
+                </Button>
+                <Button onClick={() => setShowForm(true)}>
+                  ADAUGĂ ȘOFER
+                </Button>
+              </div>
             </div>
 
             {isLoadingAst ? (
@@ -389,6 +406,15 @@ const BazaDeDate = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <GoogleSheetsImportDialog
+          open={showImportDialog}
+          onOpenChange={setShowImportDialog}
+          tableName="soferi_pelicanul_ast"
+          onSuccess={() => {
+            // Data will refresh automatically via queryClient.invalidateQueries
+          }}
+        />
       </div>
     );
   }
