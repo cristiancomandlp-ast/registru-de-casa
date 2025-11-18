@@ -37,7 +37,7 @@ export const useSoferiPelicanul = () => {
       const { data, error } = await supabase
         .from('soferi_pelicanul')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('indicativ_alocat', { ascending: true });
 
       if (error) throw error;
       return data as SoferPelicanul[];
