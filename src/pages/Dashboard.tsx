@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { DispatcherPanel } from '@/components/DispatcherPanel';
+import { DispatcherPanelDmx } from '@/components/DispatcherPanelDmx';
 import { LoanPanel } from '@/components/LoanPanel';
-import { History } from '@/components/History';
-import { ReportsDb } from '@/components/ReportsDb';
 import { Settings } from '@/components/Settings';
 import { Pontaj } from '@/components/Pontaj';
 import { Necesar } from '@/components/Necesar';
@@ -19,7 +18,7 @@ import { useAdmin } from '@/hooks/useAdmin';
 import pelicanulLogo from '@/assets/pelicanul-logo.jpg';
 import { Reclamatii } from '@/components/Reclamatii';
 
-type ViewType = 'registru' | 'istoric' | 'rapoarte' | 'drink-ok' | 'istoric-drink' | 'sold-mihai' | 'reclamatii' | 'baza-date' | 'chat-intern' | 'necesar' | 'pontaj';
+type ViewType = 'registru' | 'registru-dmx' | 'drink-ok' | 'istoric-drink' | 'sold-mihai' | 'reclamatii' | 'baza-date' | 'chat-intern' | 'necesar' | 'pontaj';
 
 const Dashboard = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -30,12 +29,11 @@ const Dashboard = () => {
 
   const navigationCards = [
     { id: 'registru' as ViewType, label: 'REGISTRU DE CASĂ', icon: FileText, color: 'bg-blue-600 hover:bg-blue-700' },
-    { id: 'istoric' as ViewType, label: 'ISTORIC', icon: HistoryIcon, color: 'bg-purple-600 hover:bg-purple-700' },
-    { id: 'rapoarte' as ViewType, label: 'RAPOARTE', icon: BarChart3, color: 'bg-green-600 hover:bg-green-700' },
+    { id: 'registru-dmx' as ViewType, label: 'REGISTRU DE CASĂ DMX', icon: FileText, color: 'bg-purple-600 hover:bg-purple-700' },
     { id: 'drink-ok' as ViewType, label: 'DRINK OK', icon: ClipboardCheck, color: 'bg-teal-600 hover:bg-teal-700' },
     { id: 'istoric-drink' as ViewType, label: 'ISTORIC DRINK', icon: Clock, color: 'bg-cyan-600 hover:bg-cyan-700' },
     { id: 'sold-mihai' as ViewType, label: 'SOLD MIHAI', icon: Wallet, color: 'bg-orange-600 hover:bg-orange-700' },
-    { id: 'reclamatii' as ViewType, label: 'RECLAMAȚII', icon: FileText, color: 'bg-red-600 hover:bg-red-700' },
+    { id: 'reclamatii' as ViewType, label: 'RECLAMAȚII', icon: BarChart3, color: 'bg-red-600 hover:bg-red-700' },
     { id: 'baza-date' as ViewType, label: 'BAZĂ DE DATE', icon: Database, color: 'bg-indigo-600 hover:bg-indigo-700' },
     { id: 'chat-intern' as ViewType, label: 'CHAT INTERN', icon: MessageSquare, color: 'bg-violet-600 hover:bg-violet-700' },
     { id: 'necesar' as ViewType, label: 'NECESAR', icon: Package, color: 'bg-rose-600 hover:bg-rose-700' },
@@ -46,10 +44,8 @@ const Dashboard = () => {
     switch (activeView) {
       case 'registru':
         return <DispatcherPanel />;
-      case 'istoric':
-        return <History />;
-      case 'rapoarte':
-        return <ReportsDb />;
+      case 'registru-dmx':
+        return <DispatcherPanelDmx />;
       case 'drink-ok':
         return <DrinkOk />;
       case 'istoric-drink':
