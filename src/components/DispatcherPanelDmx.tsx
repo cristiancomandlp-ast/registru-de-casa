@@ -7,13 +7,10 @@ import { useGoogleSheets } from '@/hooks/useGoogleSheets';
 import { useShifts } from '@/hooks/useShifts';
 import { useToast } from '@/hooks/use-toast';
 import { DispatcherName, Transaction, Shift } from '@/types/dispatcher';
-import { History } from '@/components/History';
-import { ReportsDb } from '@/components/ReportsDb';
-import { ArrowLeft } from 'lucide-react';
 
 const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Memeta"];
 
-export const DispatcherPanel = () => {
+export const DispatcherPanelDmx = () => {
   const { saveTransaction, saveShift } = useGoogleSheets();
   const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts();
   const { toast } = useToast();
@@ -23,7 +20,6 @@ export const DispatcherPanel = () => {
   const [intrareDesc, setIntrareDesc] = useState("");
   const [iesireAmount, setIesireAmount] = useState("");
   const [iesireDesc, setIesireDesc] = useState("");
-  const [activeSubView, setActiveSubView] = useState<'main' | 'istoric' | 'rapoarte'>('main');
 
   const handleStartShift = async () => {
     if (!selectedDispatcher) {
@@ -123,7 +119,7 @@ export const DispatcherPanel = () => {
     await updateShift(currentShift.id, { endTime });
 
     // Salvează și în Google Sheets (backup)
-    const completedShift: Shift = {
+    const completedShift = {
       ...currentShift,
       endTime,
     };
@@ -138,58 +134,8 @@ export const DispatcherPanel = () => {
     setSelectedDispatcher("");
   };
 
-  // Render sub-views
-  if (activeSubView === 'istoric') {
-    return (
-      <div className="space-y-4">
-        <Button 
-          onClick={() => setActiveSubView('main')} 
-          variant="outline"
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Înapoi
-        </Button>
-        <History />
-      </div>
-    );
-  }
-
-  if (activeSubView === 'rapoarte') {
-    return (
-      <div className="space-y-4">
-        <Button 
-          onClick={() => setActiveSubView('main')} 
-          variant="outline"
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Înapoi
-        </Button>
-        <ReportsDb />
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
-      {/* Butoane navigare */}
-      <div className="flex gap-3">
-        <Button 
-          onClick={() => setActiveSubView('istoric')} 
-          variant="outline"
-          className="flex-1"
-        >
-          Istoric
-        </Button>
-        <Button 
-          onClick={() => setActiveSubView('rapoarte')} 
-          variant="outline"
-          className="flex-1"
-        >
-          Rapoarte
-        </Button>
-      </div>
       {/* Selectare dispecer și început tură */}
       {!currentShift ? (
         <Card className="p-6">
