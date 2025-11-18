@@ -37,17 +37,6 @@ const BazaDeDate = () => {
   if (activeSection === 'pelicanul') {
     return (
       <div>
-        <Button
-          onClick={() => {
-            setActiveSection(null);
-            setShowForm(false);
-            setEditingSofer(null);
-          }}
-          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
-        >
-          ← Înapoi
-        </Button>
-        
         {showForm ? (
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-6 text-center">
@@ -244,17 +233,6 @@ const BazaDeDate = () => {
   if (activeSection === 'pelicanul-ast') {
     return (
       <div>
-        <Button
-          onClick={() => {
-            setActiveSection(null);
-            setShowForm(false);
-            setEditingSoferAst(null);
-          }}
-          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
-        >
-          ← Înapoi
-        </Button>
-        
         {showForm ? (
           <Card className="p-6">
             <h2 className="text-2xl font-bold mb-6 text-center">
@@ -435,6 +413,19 @@ const BazaDeDate = () => {
 
   return (
     <div className="flex flex-col gap-4 max-w-2xl mx-auto">
+      {activeSection && (
+        <Button
+          onClick={() => {
+            setActiveSection(null);
+            setShowForm(false);
+            setEditingSofer(null);
+            setEditingSoferAst(null);
+          }}
+          className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
+        >
+          ← Înapoi
+        </Button>
+      )}
       <Card
         className="bg-amber-600 hover:bg-amber-700 border-2 border-black cursor-pointer transition-all duration-200 active:scale-95"
         onClick={() => setActiveSection('pelicanul')}
