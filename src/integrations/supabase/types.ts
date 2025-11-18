@@ -253,6 +253,7 @@ export type Database = {
           administrator: string
           created_at: string
           denumire_societate: string
+          detalii: string | null
           id: string
           indicativ_alocat: string
           numar_auto: string
@@ -266,6 +267,7 @@ export type Database = {
           administrator: string
           created_at?: string
           denumire_societate: string
+          detalii?: string | null
           id?: string
           indicativ_alocat: string
           numar_auto: string
@@ -279,6 +281,7 @@ export type Database = {
           administrator?: string
           created_at?: string
           denumire_societate?: string
+          detalii?: string | null
           id?: string
           indicativ_alocat?: string
           numar_auto?: string

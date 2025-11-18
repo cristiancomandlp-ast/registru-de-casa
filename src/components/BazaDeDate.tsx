@@ -147,7 +147,20 @@ const BazaDeDate = () => {
                           {sofer.telefon_administrator}
                         </Button>
                       </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Status</p>
+                        <p className={`font-medium ${sofer.status === 'ACTIV' ? 'text-green-600' : 'text-red-600'}`}>
+                          {sofer.status || 'ACTIV'}
+                        </p>
+                      </div>
                     </div>
+                    
+                    {sofer.detalii && (
+                      <div className="mt-4 pt-4 border-t">
+                        <p className="text-sm font-semibold text-muted-foreground">Detalii</p>
+                        <p className="font-medium whitespace-pre-wrap">{sofer.detalii}</p>
+                      </div>
+                    )}
 
                     {isAdmin && (
                       <div className="flex gap-2 mt-4 pt-4 border-t">

@@ -13,6 +13,7 @@ export interface SoferPelicanul {
   telefon_administrator: string;
   nume_sofer: string;
   telefon_sofer: string;
+  detalii: string;
   created_at: string;
   updated_at: string;
 }

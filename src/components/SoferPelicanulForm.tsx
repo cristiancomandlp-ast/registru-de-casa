@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SoferPelicanul } from '@/hooks/useSoferiPelicanul';
 
 interface SoferPelicanulFormProps {
@@ -14,12 +16,13 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
   const [formData, setFormData] = useState({
     indicativ_alocat: sofer?.indicativ_alocat || '',
     numar_auto: sofer?.numar_auto || '',
-    status: sofer?.status || '',
+    status: sofer?.status || 'ACTIV',
     denumire_societate: sofer?.denumire_societate || '',
     administrator: sofer?.administrator || '',
     telefon_administrator: sofer?.telefon_administrator || '',
     nume_sofer: sofer?.nume_sofer || '',
     telefon_sofer: sofer?.telefon_sofer || '',
+    detalii: sofer?.detalii || '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,12 +56,19 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
           />
         </div>
         <div>
-          <Label htmlFor="status">Status</Label>
-          <Input
-            id="status"
+          <Label htmlFor="status">Status *</Label>
+          <Select
             value={formData.status}
-            onChange={(e) => handleChange('status', e.target.value)}
-          />
+            onValueChange={(value) => handleChange('status', value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selectează status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ACTIV">ACTIV</SelectItem>
+              <SelectItem value="INACTIV">INACTIV</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor="denumire_societate">Firmă *</Label>
@@ -105,6 +115,17 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
             required
           />
         </div>
+      </div>
+
+      <div className="mt-4">
+        <Label htmlFor="detalii">Detalii</Label>
+        <Textarea
+          id="detalii"
+          value={formData.detalii}
+          onChange={(e) => handleChange('detalii', e.target.value)}
+          placeholder="Adaugă detalii suplimentare..."
+          rows={4}
+        />
       </div>
 
       <div className="flex gap-2 justify-end pt-4">
