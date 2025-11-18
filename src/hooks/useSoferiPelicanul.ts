@@ -27,11 +27,18 @@ export const useSoferiPelicanul = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('soferi_pelicanul')
-        .select('*')
-        .order('indicativ_alocat', { ascending: true });
+        .select('*');
 
       if (error) throw error;
-      return data as SoferPelicanul[];
+      
+      // Sort numerically by indicativ_alocat
+      const sortedData = (data as SoferPelicanul[]).sort((a, b) => {
+        const numA = parseInt(a.indicativ_alocat) || 0;
+        const numB = parseInt(b.indicativ_alocat) || 0;
+        return numA - numB;
+      });
+      
+      return sortedData;
     },
   });
 
