@@ -12,7 +12,7 @@ const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Me
 
 export const DispatcherPanelDmx = () => {
   const { saveTransaction, saveShift } = useGoogleSheets();
-  const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts();
+  const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts('DMX');
   const { toast } = useToast();
 
   const [selectedDispatcher, setSelectedDispatcher] = useState<DispatcherName | "">("");
