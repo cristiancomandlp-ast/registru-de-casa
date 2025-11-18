@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Users, Phone, Edit, Trash2 } from 'lucide-react';
+import { Users, Phone, Edit, Trash2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSoferiPelicanulAst, SoferPelicanulAst } from '@/hooks/useSoferiPelicanulAst';
 import { useSoferiPelicanul, SoferPelicanul } from '@/hooks/useSoferiPelicanul';
@@ -82,9 +82,21 @@ const BazaDeDate = () => {
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">ȘOFERI PELICANUL</h2>
-              <Button onClick={() => setShowForm(true)}>
-                ADAUGĂ ȘOFER
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    // TODO: Implement Google Sheets import
+                    alert('Funcția de import va fi implementată');
+                  }}
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  IMPORTĂ FOAIE DE CALCUL
+                </Button>
+                <Button onClick={() => setShowForm(true)}>
+                  ADAUGĂ ȘOFER
+                </Button>
+              </div>
             </div>
 
             {isLoading ? (
