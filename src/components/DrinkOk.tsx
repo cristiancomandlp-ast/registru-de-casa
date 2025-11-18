@@ -5,10 +5,17 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { DrinkHistory } from '@/components/DrinkHistory';
+import { ArrowLeft } from 'lucide-react';
 
-export const DrinkOk = () => {
+interface DrinkOkProps {
+  onBack?: () => void;
+}
+
+export const DrinkOk = ({ onBack }: DrinkOkProps) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [activeSubView, setActiveSubView] = useState<'main' | 'istoric'>('main');
   const [formData, setFormData] = useState({
     data_ora: new Date().toISOString().slice(0, 16),
     nume_client: '',
@@ -93,8 +100,35 @@ export const DrinkOk = () => {
     }
   };
 
+  // Render sub-view
+  if (activeSubView === 'istoric') {
+    return (
+      <div className="space-y-4">
+        <Button 
+          onClick={onBack} 
+          variant="destructive"
+          className="mb-4"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Înapoi
+        </Button>
+        <DrinkHistory />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {/* Buton navigare */}
+      <div className="flex gap-3">
+        <Button 
+          onClick={() => setActiveSubView('istoric')} 
+          variant="outline"
+          className="flex-1"
+        >
+          Istoric Drink
+        </Button>
+      </div>
       <Card className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
