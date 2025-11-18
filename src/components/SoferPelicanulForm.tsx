@@ -20,16 +20,6 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
     telefon_administrator: sofer?.telefon_administrator || '',
     nume_sofer: sofer?.nume_sofer || '',
     telefon_sofer: sofer?.telefon_sofer || '',
-    numar_contract: sofer?.numar_contract || '',
-    data_contract: sofer?.data_contract || '',
-    cui: sofer?.cui || '',
-    nr_inreg_onrc: sofer?.nr_inreg_onrc || '',
-    sediu_societate: sofer?.sediu_societate || '',
-    localitate: sofer?.localitate || '',
-    aut_taxi: sofer?.aut_taxi || '',
-    aut_transp: sofer?.aut_transp || '',
-    marca_auto: sofer?.marca_auto || '',
-    serie_sasiu: sofer?.serie_sasiu || '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -114,93 +104,6 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
             onChange={(e) => handleChange('telefon_sofer', e.target.value)}
             required
           />
-        </div>
-      </div>
-
-      <div className="mt-6 pt-4 border-t">
-        <h3 className="text-sm font-semibold mb-4">Informații Suplimentare (Opțional)</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="numar_contract">Număr Contract</Label>
-            <Input
-              id="numar_contract"
-              value={formData.numar_contract}
-              onChange={(e) => handleChange('numar_contract', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="data_contract">Data Contract</Label>
-            <Input
-              id="data_contract"
-              type="date"
-              value={formData.data_contract}
-              onChange={(e) => handleChange('data_contract', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="cui">CUI</Label>
-            <Input
-              id="cui"
-              value={formData.cui}
-              onChange={(e) => handleChange('cui', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="nr_inreg_onrc">Nr. Înreg. ONRC</Label>
-            <Input
-              id="nr_inreg_onrc"
-              value={formData.nr_inreg_onrc}
-              onChange={(e) => handleChange('nr_inreg_onrc', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="sediu_societate">Sediu Societate</Label>
-            <Input
-              id="sediu_societate"
-              value={formData.sediu_societate}
-              onChange={(e) => handleChange('sediu_societate', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="localitate">Localitate</Label>
-            <Input
-              id="localitate"
-              value={formData.localitate}
-              onChange={(e) => handleChange('localitate', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="aut_taxi">Aut. Taxi</Label>
-            <Input
-              id="aut_taxi"
-              value={formData.aut_taxi}
-              onChange={(e) => handleChange('aut_taxi', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="aut_transp">Aut. Transport</Label>
-            <Input
-              id="aut_transp"
-              value={formData.aut_transp}
-              onChange={(e) => handleChange('aut_transp', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="marca_auto">Marcă Auto</Label>
-            <Input
-              id="marca_auto"
-              value={formData.marca_auto}
-              onChange={(e) => handleChange('marca_auto', e.target.value)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="serie_sasiu">Serie Șasiu</Label>
-            <Input
-              id="serie_sasiu"
-              value={formData.serie_sasiu}
-              onChange={(e) => handleChange('serie_sasiu', e.target.value)}
-            />
-          </div>
         </div>
       </div>
 

@@ -129,10 +129,6 @@ const BazaDeDate = () => {
                         <p className="font-medium">{sofer.denumire_societate}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-muted-foreground">Marca Auto</p>
-                        <p className="font-medium">{sofer.marca_auto}</p>
-                      </div>
-                      <div>
                         <p className="text-sm font-semibold text-muted-foreground">Număr Auto</p>
                         <p className="font-medium">{sofer.numar_auto}</p>
                       </div>
@@ -150,10 +146,6 @@ const BazaDeDate = () => {
                           <Phone className="h-4 w-4 mr-1" />
                           {sofer.telefon_administrator}
                         </Button>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-muted-foreground">Localitate</p>
-                        <p className="font-medium">{sofer.localitate}</p>
                       </div>
                     </div>
 

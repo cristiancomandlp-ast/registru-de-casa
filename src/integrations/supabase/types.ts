@@ -251,22 +251,12 @@ export type Database = {
       soferi_pelicanul: {
         Row: {
           administrator: string
-          aut_taxi: string | null
-          aut_transp: string | null
           created_at: string
-          cui: string | null
-          data_contract: string | null
           denumire_societate: string
           id: string
           indicativ_alocat: string
-          localitate: string | null
-          marca_auto: string | null
-          nr_inreg_onrc: string | null
           numar_auto: string
-          numar_contract: string | null
           nume_sofer: string
-          sediu_societate: string | null
-          serie_sasiu: string | null
           status: string | null
           telefon_administrator: string
           telefon_sofer: string
@@ -274,22 +264,12 @@ export type Database = {
         }
         Insert: {
           administrator: string
-          aut_taxi?: string | null
-          aut_transp?: string | null
           created_at?: string
-          cui?: string | null
-          data_contract?: string | null
           denumire_societate: string
           id?: string
           indicativ_alocat: string
-          localitate?: string | null
-          marca_auto?: string | null
-          nr_inreg_onrc?: string | null
           numar_auto: string
-          numar_contract?: string | null
           nume_sofer: string
-          sediu_societate?: string | null
-          serie_sasiu?: string | null
           status?: string | null
           telefon_administrator: string
           telefon_sofer: string
@@ -297,22 +277,12 @@ export type Database = {
         }
         Update: {
           administrator?: string
-          aut_taxi?: string | null
-          aut_transp?: string | null
           created_at?: string
-          cui?: string | null
-          data_contract?: string | null
           denumire_societate?: string
           id?: string
           indicativ_alocat?: string
-          localitate?: string | null
-          marca_auto?: string | null
-          nr_inreg_onrc?: string | null
           numar_auto?: string
-          numar_contract?: string | null
           nume_sofer?: string
-          sediu_societate?: string | null
-          serie_sasiu?: string | null
           status?: string | null
           telefon_administrator?: string
           telefon_sofer?: string

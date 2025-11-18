@@ -54,24 +54,14 @@ export const GoogleSheetsImportDialog = ({
 
   const mapToTableStructure = (data: any[]): any[] => {
     return data.map(row => ({
-      indicativ_alocat: row['INDICATIV'] || row['INDICATIV AUTO'] || row['indicativ_alocat'] || '',
-      numar_auto: row['NUMAR AUTO'] || row['NUMAR INMATRICULARE'] || row['numar_auto'] || '',
-      status: row['STATUS'] || row['status'] || '',
-      denumire_societate: row['FIRMA'] || row['denumire_societate'] || '',
-      administrator: row['ADMINISTRATOR'] || row['administrator'] || '',
-      telefon_administrator: row['TEL. ADMINISTRATOR'] || row['TELEFON ADMINISTRATOR'] || row['telefon_administrator'] || '',
-      nume_sofer: row['NUME SOFER'] || row['nume_sofer'] || '',
-      telefon_sofer: row['TELEFON'] || row['TELEFON SOFER'] || row['telefon_sofer'] || '',
-      numar_contract: '',
-      data_contract: '2024-01-01',
-      cui: '',
-      nr_inreg_onrc: '',
-      sediu_societate: '',
-      localitate: '',
-      aut_taxi: '',
-      aut_transp: '',
-      marca_auto: '',
-      serie_sasiu: '',
+      indicativ_alocat: row['INDICATIV'] || '',
+      numar_auto: row['NUMAR AUTO'] || '',
+      status: row['STATUS'] || '',
+      denumire_societate: row['FIRMA'] || '',
+      administrator: row['ADMINISTRATOR'] || '',
+      telefon_administrator: row['TEL. ADMINISTRATOR'] || '',
+      nume_sofer: row['NUME SOFER'] || '',
+      telefon_sofer: row['TELEFON'] || '',
     }));
   };
 

@@ -13,16 +13,6 @@ export interface SoferPelicanul {
   telefon_administrator: string;
   nume_sofer: string;
   telefon_sofer: string;
-  numar_contract?: string;
-  data_contract?: string;
-  cui?: string;
-  nr_inreg_onrc?: string;
-  sediu_societate?: string;
-  localitate?: string;
-  aut_taxi?: string;
-  aut_transp?: string;
-  marca_auto?: string;
-  serie_sasiu?: string;
   created_at: string;
   updated_at: string;
 }
