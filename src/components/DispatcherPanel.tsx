@@ -13,7 +13,11 @@ import { ArrowLeft } from 'lucide-react';
 
 const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Memeta"];
 
-export const DispatcherPanel = () => {
+interface DispatcherPanelProps {
+  onBack?: () => void;
+}
+
+export const DispatcherPanel = ({ onBack }: DispatcherPanelProps) => {
   const { saveTransaction, saveShift } = useGoogleSheets();
   const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts('CASA');
   const { toast } = useToast();
@@ -143,7 +147,7 @@ export const DispatcherPanel = () => {
     return (
       <div className="space-y-4">
         <Button 
-          onClick={() => setActiveSubView('main')} 
+          onClick={onBack} 
           variant="destructive"
           className="mb-4"
         >
@@ -159,7 +163,7 @@ export const DispatcherPanel = () => {
     return (
       <div className="space-y-4">
         <Button 
-          onClick={() => setActiveSubView('main')} 
+          onClick={onBack} 
           variant="destructive"
           className="mb-4"
         >
