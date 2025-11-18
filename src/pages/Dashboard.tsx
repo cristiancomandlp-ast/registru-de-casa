@@ -66,15 +66,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="container max-w-4xl mx-auto p-4 md:p-6">
-        {activeView && (
-          <Button
-            onClick={() => setActiveView(null)}
-            className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
-          >
-            ← Înapoi
-          </Button>
-        )}
-        <div className="mb-6 flex flex-col gap-4">
+        <div className="mb-4 md:mb-6 flex flex-col gap-3 md:gap-4">
           <div className="flex justify-between items-start">
             <div className="text-left">
               <div className="text-lg font-semibold text-gray-800">{formatTime()}</div>
@@ -107,24 +99,24 @@ const Dashboard = () => {
           <img 
             src={pelicanulLogo} 
             alt="Pelicanul Taxi Logo" 
-            className="w-64 mx-auto"
+            className="w-48 sm:w-56 md:w-64 mx-auto"
           />
         </div>
 
         {showSettings ? (
           <Settings />
         ) : activeView ? (
-          <div>
+          <div className="mt-4">
             <Button
               onClick={() => setActiveView(null)}
-              className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black"
+              className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black w-full sm:w-auto"
             >
               ← Înapoi
             </Button>
             {renderContent()}
           </div>
         ) : (
-          <div className="flex flex-col gap-4 max-w-2xl mx-auto">
+          <div className="flex flex-col gap-3 md:gap-4 max-w-2xl mx-auto">
             {navigationCards.map((card) => {
               const Icon = card.icon;
               return (
@@ -133,9 +125,9 @@ const Dashboard = () => {
                   className={`${card.color} border-2 border-black cursor-pointer transition-all duration-200 active:scale-95`}
                   onClick={() => setActiveView(card.id)}
                 >
-                  <div className="flex items-center justify-center gap-3 py-8 px-6">
-                    <Icon className="h-6 w-6 text-white" />
-                    <span className="text-white font-bold text-lg tracking-wide">
+                  <div className="flex items-center justify-center gap-2 md:gap-3 py-6 md:py-8 px-4 md:px-6">
+                    <Icon className="h-5 w-5 md:h-6 md:w-6 text-white flex-shrink-0" />
+                    <span className="text-white font-bold text-base md:text-lg tracking-wide">
                       {card.label}
                     </span>
                   </div>
