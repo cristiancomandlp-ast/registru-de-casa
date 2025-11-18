@@ -27,15 +27,15 @@ const Dashboard = () => {
   const { isAdmin } = useAdmin();
 
   const navigationCards = [
-    { id: 'registru' as ViewType, label: 'REGISTRU DE CASĂ', icon: FileText, color: 'bg-blue-600 hover:bg-blue-700' },
+    { id: 'registru' as ViewType, label: 'REGISTRU DE CASĂ', icon: FileText, color: 'bg-black hover:bg-gray-800' },
     { id: 'registru-dmx' as ViewType, label: 'REGISTRU DE CASĂ DMX', icon: FileText, color: 'bg-purple-600 hover:bg-purple-700' },
-    { id: 'drink-ok' as ViewType, label: 'DRINK OK', icon: ClipboardCheck, color: 'bg-teal-600 hover:bg-teal-700' },
-    { id: 'sold-mihai' as ViewType, label: 'SOLD MIHAI', icon: Wallet, color: 'bg-orange-600 hover:bg-orange-700' },
+    { id: 'drink-ok' as ViewType, label: 'DRINK OK', icon: ClipboardCheck, color: 'bg-emerald-600 hover:bg-emerald-700' },
+    { id: 'sold-mihai' as ViewType, label: 'SOLD MIHAI', icon: Wallet, color: 'bg-amber-600 hover:bg-amber-700' },
     { id: 'reclamatii' as ViewType, label: 'RECLAMAȚII', icon: BarChart3, color: 'bg-red-600 hover:bg-red-700' },
-    { id: 'baza-date' as ViewType, label: 'BAZĂ DE DATE', icon: Database, color: 'bg-indigo-600 hover:bg-indigo-700' },
-    { id: 'chat-intern' as ViewType, label: 'CHAT INTERN', icon: MessageSquare, color: 'bg-violet-600 hover:bg-violet-700' },
-    { id: 'necesar' as ViewType, label: 'NECESAR', icon: Package, color: 'bg-rose-600 hover:bg-rose-700' },
-    { id: 'pontaj' as ViewType, label: 'PONTAJ', icon: Users, color: 'bg-pink-600 hover:bg-pink-700' },
+    { id: 'baza-date' as ViewType, label: 'BAZĂ DE DATE', icon: Database, color: 'bg-blue-600 hover:bg-blue-700' },
+    { id: 'chat-intern' as ViewType, label: 'CHAT INTERN', icon: MessageSquare, color: 'bg-sky-600 hover:bg-sky-700' },
+    { id: 'necesar' as ViewType, label: 'NECESAR', icon: Package, color: 'bg-lime-600 hover:bg-lime-700' },
+    { id: 'pontaj' as ViewType, label: 'PONTAJ', icon: Users, color: 'bg-fuchsia-600 hover:bg-fuchsia-700' },
   ];
 
   const renderContent = () => {
