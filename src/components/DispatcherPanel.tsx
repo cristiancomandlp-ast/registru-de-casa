@@ -15,7 +15,7 @@ const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Me
 
 export const DispatcherPanel = () => {
   const { saveTransaction, saveShift } = useGoogleSheets();
-  const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts();
+  const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts('CASA');
   const { toast } = useToast();
 
   const [selectedDispatcher, setSelectedDispatcher] = useState<DispatcherName | "">("");
@@ -144,7 +144,7 @@ export const DispatcherPanel = () => {
       <div className="space-y-4">
         <Button 
           onClick={() => setActiveSubView('main')} 
-          variant="outline"
+          variant="destructive"
           className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -160,7 +160,7 @@ export const DispatcherPanel = () => {
       <div className="space-y-4">
         <Button 
           onClick={() => setActiveSubView('main')} 
-          variant="outline"
+          variant="destructive"
           className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />

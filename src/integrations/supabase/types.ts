@@ -223,6 +223,7 @@ export type Database = {
           final_balance: number
           id: string
           initial_balance: number
+          register_type: string
           start_time: string
         }
         Insert: {
@@ -232,6 +233,7 @@ export type Database = {
           final_balance?: number
           id: string
           initial_balance?: number
+          register_type?: string
           start_time?: string
         }
         Update: {
@@ -241,6 +243,7 @@ export type Database = {
           final_balance?: number
           id?: string
           initial_balance?: number
+          register_type?: string
           start_time?: string
         }
         Relationships: []
@@ -390,6 +393,7 @@ export type Database = {
           description: string
           dispatcher: string
           id: string
+          register_type: string
           shift_id: string
           timestamp: string
           type: string
@@ -400,6 +404,7 @@ export type Database = {
           description: string
           dispatcher: string
           id: string
+          register_type?: string
           shift_id: string
           timestamp?: string
           type: string
@@ -410,6 +415,7 @@ export type Database = {
           description?: string
           dispatcher?: string
           id?: string
+          register_type?: string
           shift_id?: string
           timestamp?: string
           type?: string

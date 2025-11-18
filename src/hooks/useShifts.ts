@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Shift } from '@/types/dispatcher';
 
-export const useShifts = () => {
+export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
   const [currentShift, setCurrentShift] = useState<Shift | null>(null);
   const [history, setHistory] = useState<Shift[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,17 +41,18 @@ export const useShifts = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [registerType]);
 
   const loadShifts = async () => {
     try {
-      // Încarcă toate turele cu tranzacțiile lor
+      // Încarcă toate turele cu tranzacțiile lor pentru registrul specificat
       const { data: shiftsData, error: shiftsError } = await (supabase as any)
         .from('shifts')
         .select(`
           *,
           transactions (*)
         `)
+        .eq('register_type', registerType)
         .order('start_time', { ascending: false });
 
       if (shiftsError) throw shiftsError;
@@ -99,6 +100,7 @@ export const useShifts = () => {
           start_time: shift.startTime,
           initial_balance: shift.initialBalance,
           final_balance: shift.finalBalance,
+          register_type: registerType,
         });
 
       if (error) throw error;
@@ -138,6 +140,7 @@ export const useShifts = () => {
           description: transaction.description,
           timestamp: transaction.timestamp,
           dispatcher: transaction.dispatcher,
+          register_type: registerType,
         });
 
       if (error) throw error;
