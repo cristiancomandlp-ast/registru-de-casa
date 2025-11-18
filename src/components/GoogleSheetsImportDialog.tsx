@@ -175,9 +175,7 @@ export const GoogleSheetsImportDialog = ({
               <li>Lipește URL-ul mai sus</li>
             </ol>
             <p className="text-muted-foreground mt-2">
-              Foaia trebuie să conțină coloane cu numele: INDICATIV (sau INDICATIV AUTO), 
-              NUMAR AUTO (sau NUMAR INMATRICULARE), STATUS, FIRMA, ADMINISTRATOR, 
-              TEL. ADMINISTRATOR (sau TELEFON ADMINISTRATOR), NUME SOFER, TELEFON (sau TELEFON SOFER)
+              Foaia trebuie să conțină coloane cu numele: INDICATIV, NUMAR AUTO, STATUS, FIRMA, ADMINISTRATOR, TEL. ADMINISTRATOR, NUME SOFER, TELEFON
             </p>
           </div>
         </div>
