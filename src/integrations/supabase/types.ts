@@ -170,6 +170,51 @@ export type Database = {
         }
         Relationships: []
       }
+      reclamatii: {
+        Row: {
+          created_at: string
+          data_incident: string
+          descriere: string
+          email: string | null
+          id: string
+          numar_taxi: string
+          nume_complet: string
+          ora_incident: string
+          status: string
+          telefon: string
+          tip_reclamatie: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data_incident: string
+          descriere: string
+          email?: string | null
+          id?: string
+          numar_taxi: string
+          nume_complet: string
+          ora_incident: string
+          status?: string
+          telefon: string
+          tip_reclamatie: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data_incident?: string
+          descriere?: string
+          email?: string | null
+          id?: string
+          numar_taxi?: string
+          nume_complet?: string
+          ora_incident?: string
+          status?: string
+          telefon?: string
+          tip_reclamatie?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       shifts: {
         Row: {
           created_at: string
