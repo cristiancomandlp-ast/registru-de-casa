@@ -6,7 +6,6 @@ import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { DrinkHistory } from '@/components/DrinkHistory';
-import { ArrowLeft } from 'lucide-react';
 
 interface DrinkOkProps {
   onBack?: () => void;
@@ -102,19 +101,7 @@ export const DrinkOk = ({ onBack }: DrinkOkProps) => {
 
   // Render sub-view
   if (activeSubView === 'istoric') {
-    return (
-      <div className="space-y-4">
-        <Button 
-          onClick={() => setActiveSubView('main')} 
-          variant="destructive"
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Înapoi
-        </Button>
-        <DrinkHistory />
-      </div>
-    );
+    return <DrinkHistory />;
   }
 
   return (

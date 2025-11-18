@@ -9,7 +9,6 @@ import { useToast } from '@/hooks/use-toast';
 import { DispatcherName, Transaction, Shift } from '@/types/dispatcher';
 import { History } from '@/components/History';
 import { ReportsDb } from '@/components/ReportsDb';
-import { ArrowLeft } from 'lucide-react';
 
 const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Memeta"];
 
@@ -144,35 +143,11 @@ export const DispatcherPanel = ({ onBack }: DispatcherPanelProps) => {
 
   // Render sub-views
   if (activeSubView === 'istoric') {
-    return (
-      <div className="space-y-4">
-        <Button 
-          onClick={() => setActiveSubView('main')} 
-          variant="destructive"
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Înapoi
-        </Button>
-        <History />
-      </div>
-    );
+    return <History />;
   }
 
   if (activeSubView === 'rapoarte') {
-    return (
-      <div className="space-y-4">
-        <Button 
-          onClick={() => setActiveSubView('main')} 
-          variant="destructive"
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Înapoi
-        </Button>
-        <ReportsDb />
-      </div>
-    );
+    return <ReportsDb />;
   }
 
   return (
