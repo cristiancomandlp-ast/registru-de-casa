@@ -104,33 +104,29 @@ const BazaDeDate = () => {
               <div className="space-y-4">
                 {soferi.map((sofer) => (
                   <Card key={sofer.id} className="p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Primul rând: Indicativ, Număr Înmatriculare, Status */}
+                    <div className="grid grid-cols-3 gap-4 mb-3">
                       <div>
                         <p className="text-sm font-semibold text-muted-foreground">Indicativ</p>
                         <p className="font-medium">{sofer.indicativ_alocat}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-muted-foreground">Nume Șofer</p>
-                        <p className="font-medium">{sofer.nume_sofer}</p>
+                        <p className="text-sm font-semibold text-muted-foreground">Număr Înmatriculare</p>
+                        <p className="font-medium">{sofer.numar_auto}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-muted-foreground">Telefon Șofer</p>
-                        <Button
-                          variant="link"
-                          className="p-0 h-auto font-medium"
-                          onClick={() => handlePhoneCall(sofer.telefon_sofer)}
-                        >
-                          <Phone className="h-4 w-4 mr-1" />
-                          {sofer.telefon_sofer}
-                        </Button>
+                        <p className="text-sm font-semibold text-muted-foreground">Status</p>
+                        <p className={`font-medium ${sofer.status === 'ACTIV' ? 'text-green-600' : 'text-red-600'}`}>
+                          {sofer.status || 'ACTIV'}
+                        </p>
                       </div>
+                    </div>
+
+                    {/* Al doilea rând: Denumire Societate, Administrator, Telefon Administrator */}
+                    <div className="grid grid-cols-3 gap-4 mb-3">
                       <div>
                         <p className="text-sm font-semibold text-muted-foreground">Denumire Societate</p>
                         <p className="font-medium">{sofer.denumire_societate}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-muted-foreground">Număr Auto</p>
-                        <p className="font-medium">{sofer.numar_auto}</p>
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-muted-foreground">Administrator</p>
@@ -147,11 +143,24 @@ const BazaDeDate = () => {
                           {sofer.telefon_administrator}
                         </Button>
                       </div>
+                    </div>
+
+                    {/* Al treilea rând: Nume Șofer, Telefon Șofer */}
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm font-semibold text-muted-foreground">Status</p>
-                        <p className={`font-medium ${sofer.status === 'ACTIV' ? 'text-green-600' : 'text-red-600'}`}>
-                          {sofer.status || 'ACTIV'}
-                        </p>
+                        <p className="text-sm font-semibold text-muted-foreground">Nume Șofer</p>
+                        <p className="font-medium">{sofer.nume_sofer}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-muted-foreground">Telefon Șofer</p>
+                        <Button
+                          variant="link"
+                          className="p-0 h-auto font-medium"
+                          onClick={() => handlePhoneCall(sofer.telefon_sofer)}
+                        >
+                          <Phone className="h-4 w-4 mr-1" />
+                          {sofer.telefon_sofer}
+                        </Button>
                       </div>
                     </div>
                     
