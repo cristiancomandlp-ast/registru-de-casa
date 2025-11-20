@@ -1,31 +1,28 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import { useGoogleSheets } from '@/hooks/useGoogleSheets';
 import { useShifts } from '@/hooks/useShifts';
 import { useToast } from '@/hooks/use-toast';
-import { DispatcherName, Transaction, Shift } from '@/types/dispatcher';
-
-const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Memeta"];
+import { Transaction, Shift } from '@/types/dispatcher';
 
 export const DispatcherPanelDmx = () => {
   const { saveTransaction, saveShift } = useGoogleSheets();
   const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts('DMX');
+  const { currentShift: casaShift } = useShifts('CASA'); // Get CASA shift for dispatcher info
   const { toast } = useToast();
 
-  const [selectedDispatcher, setSelectedDispatcher] = useState<DispatcherName | "">("");
   const [intrareAmount, setIntrareAmount] = useState("");
   const [intrareDesc, setIntrareDesc] = useState("");
   const [iesireAmount, setIesireAmount] = useState("");
   const [iesireDesc, setIesireDesc] = useState("");
 
   const handleStartShift = async () => {
-    if (!selectedDispatcher) {
+    if (!casaShift) {
       toast({
         title: "Eroare",
-        description: "Selectează un dispecer",
+        description: "Nu există o tură activă în REGISTRU DE CASA",
         variant: "destructive",
       });
       return;
@@ -36,7 +33,7 @@ export const DispatcherPanelDmx = () => {
 
     const newShift: Shift = {
       id: `shift_${Date.now()}`,
-      dispatcher: selectedDispatcher,
+      dispatcher: casaShift.dispatcher, // Use dispatcher from CASA register
       startTime: new Date().toISOString(),
       initialBalance: previousFinalBalance,
       finalBalance: previousFinalBalance,
@@ -47,7 +44,7 @@ export const DispatcherPanelDmx = () => {
     
     toast({
       title: "Tură începută",
-      description: `${selectedDispatcher} a început tura cu sold inițial: ${previousFinalBalance} lei`,
+      description: `${casaShift.dispatcher} a început tura DMX cu sold inițial: ${previousFinalBalance} lei`,
     });
   };
 
@@ -129,33 +126,30 @@ export const DispatcherPanelDmx = () => {
       title: "Tură încheiată",
       description: `Sold final: ${currentShift.finalBalance.toFixed(2)} lei`,
     });
-
-    // Resetează selectorul
-    setSelectedDispatcher("");
   };
 
   return (
     <div className="space-y-6">
-      {/* Selectare dispecer și început tură */}
+      {/* Început tură */}
       {!currentShift ? (
         <Card className="p-6">
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Alege tura, dispecerul și începe. Lasă „Sold inițial" 0 pentru preluare automată.
+              Începe tura DMX. Dispecerul va fi preluat automat din REGISTRU DE CASA.
             </p>
             
-            <Select value={selectedDispatcher} onValueChange={(value) => setSelectedDispatcher(value as DispatcherName)}>
-              <SelectTrigger>
-                <SelectValue placeholder="— Alege dispecer —" />
-              </SelectTrigger>
-              <SelectContent>
-                {dispatchers.map((dispatcher) => (
-                  <SelectItem key={dispatcher} value={dispatcher}>
-                    {dispatcher}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {casaShift ? (
+              <div className="p-3 bg-muted rounded-md">
+                <div className="flex justify-between">
+                  <span className="font-medium">Dispecer activ:</span>
+                  <span>{casaShift.dispatcher}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
+                Atenție: Nu există o tură activă în REGISTRU DE CASA
+              </div>
+            )}
 
             <Input
               type="number"
@@ -164,8 +158,8 @@ export const DispatcherPanelDmx = () => {
               placeholder="0"
             />
 
-            <Button onClick={handleStartShift} className="w-full">
-              Începe Tura
+            <Button onClick={handleStartShift} className="w-full" disabled={!casaShift}>
+              Începe Tura DMX
             </Button>
           </div>
         </Card>
