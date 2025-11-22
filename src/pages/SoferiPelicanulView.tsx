@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Phone, Search } from 'lucide-react';
+import { Phone, Search, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useSoferiPelicanul } from '@/hooks/useSoferiPelicanul';
+import { useSoferiPelicanul, SoferPelicanul } from '@/hooks/useSoferiPelicanul';
+import { useAdmin } from '@/hooks/useAdmin';
+import SoferPelicanulForm from '@/components/SoferPelicanulForm';
 
 const SoferiPelicanulView = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { soferi, isLoading } = useSoferiPelicanul();
+  const [showForm, setShowForm] = useState(false);
+  const [editingSofer, setEditingSofer] = useState<SoferPelicanul | null>(null);
+  const { soferi, isLoading, updateSofer } = useSoferiPelicanul();
+  const { isAdmin } = useAdmin();
 
   const handlePhoneCall = (phoneNumber: string) => {
     window.location.href = `tel:${phoneNumber}`;
@@ -15,6 +20,31 @@ const SoferiPelicanulView = () => {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
+      {showForm ? (
+        <Card className="p-6 max-w-7xl mx-auto">
+          <h2 className="text-2xl font-bold mb-6 text-center">EDITEAZĂ ȘOFER</h2>
+          <SoferPelicanulForm
+            sofer={editingSofer || undefined}
+            onSubmit={(soferData) => {
+              if (editingSofer) {
+                updateSofer.mutate(
+                  { id: editingSofer.id, ...soferData } as SoferPelicanul,
+                  {
+                    onSuccess: () => {
+                      setShowForm(false);
+                      setEditingSofer(null);
+                    },
+                  }
+                );
+              }
+            }}
+            onCancel={() => {
+              setShowForm(false);
+              setEditingSofer(null);
+            }}
+          />
+        </Card>
+      ) : (
       <Card className="p-4 md:p-6 max-w-7xl mx-auto">
         <div className="mb-4 md:mb-6">
           <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">ȘOFERI PELICANUL</h2>
@@ -115,6 +145,23 @@ const SoferiPelicanulView = () => {
                     <p className="font-medium whitespace-pre-wrap">{sofer.detalii}</p>
                   </div>
                 )}
+
+                {isAdmin && (
+                  <div className="flex gap-2 mt-4 pt-4 border-t">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingSofer(sofer);
+                        setShowForm(true);
+                      }}
+                      className="w-full sm:w-auto"
+                    >
+                      <Edit className="h-4 w-4 mr-1" />
+                      Editează
+                    </Button>
+                  </div>
+                )}
               </Card>
             ))}
           </div>
@@ -124,6 +171,7 @@ const SoferiPelicanulView = () => {
           </div>
         )}
       </Card>
+      )}
     </div>
   );
 };
