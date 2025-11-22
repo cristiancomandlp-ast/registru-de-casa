@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SoferPelicanul } from '@/hooks/useSoferiPelicanul';
+import { useToast } from '@/hooks/use-toast';
 
 interface SoferPelicanulFormProps {
   sofer?: SoferPelicanul;
@@ -13,6 +14,7 @@ interface SoferPelicanulFormProps {
 }
 
 const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormProps) => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     indicativ_alocat: sofer?.indicativ_alocat || '',
     numar_auto: sofer?.numar_auto || '',
@@ -25,8 +27,41 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
     detalii: sofer?.detalii || '',
   });
 
+  // Păstrăm datele originale pentru comparație
+  const originalData = sofer ? {
+    indicativ_alocat: sofer.indicativ_alocat,
+    numar_auto: sofer.numar_auto,
+    status: sofer.status || 'ACTIV',
+    denumire_societate: sofer.denumire_societate,
+    administrator: sofer.administrator,
+    telefon_administrator: sofer.telefon_administrator,
+    nume_sofer: sofer.nume_sofer,
+    telefon_sofer: sofer.telefon_sofer,
+    detalii: sofer.detalii || '',
+  } : null;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Verificare pentru editare: s-a modificat ceva SAU statusul s-a schimbat din ACTIV în INACTIV
+    if (sofer && originalData) {
+      const hasChanges = Object.keys(formData).some(
+        key => formData[key as keyof typeof formData] !== originalData[key as keyof typeof originalData]
+      );
+      
+      const statusChangedToInactive = 
+        originalData.status === 'ACTIV' && formData.status === 'INACTIV';
+      
+      if (!hasChanges && !statusChangedToInactive) {
+        toast({
+          title: 'Nicio modificare',
+          description: 'Nu ați modificat niciun câmp. Editați cel puțin un câmp sau schimbați statusul din ACTIV în INACTIV pentru a salva.',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+    
     onSubmit(formData);
   };
 
