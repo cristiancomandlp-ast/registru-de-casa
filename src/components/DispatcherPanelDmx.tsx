@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -17,6 +17,16 @@ export const DispatcherPanelDmx = () => {
   const [intrareDesc, setIntrareDesc] = useState("");
   const [iesireAmount, setIesireAmount] = useState("");
   const [iesireDesc, setIesireDesc] = useState("");
+
+  // Actualizează automat dispecerul din DMX când se schimbă în CASA
+  useEffect(() => {
+    if (currentShift && casaShift && currentShift.dispatcher !== casaShift.dispatcher) {
+      // Sincronizează dispecerul
+      updateShift(currentShift.id, { 
+        dispatcher: casaShift.dispatcher 
+      } as Partial<Shift>);
+    }
+  }, [casaShift?.dispatcher, currentShift?.id]);
 
   const handleStartShift = async () => {
     if (!casaShift) {
@@ -251,6 +261,9 @@ export const DispatcherPanelDmx = () => {
                           </div>
                           <div className="text-sm text-muted-foreground">
                             {transaction.description}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-1">
+                            Dispecer: {transaction.dispatcher}
                           </div>
                         </div>
                         <div className="text-xs text-muted-foreground text-right">

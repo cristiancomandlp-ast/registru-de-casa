@@ -115,6 +115,7 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
       const dbUpdates: any = {};
       if (updates.finalBalance !== undefined) dbUpdates.final_balance = updates.finalBalance;
       if (updates.endTime !== undefined) dbUpdates.end_time = updates.endTime;
+      if (updates.dispatcher !== undefined) dbUpdates.dispatcher = updates.dispatcher;
 
       const { error } = await (supabase as any)
         .from('shifts')
