@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Transaction, Shift } from '@/types/dispatcher';
 
 export const DispatcherPanelDmx = () => {
-  const { saveTransaction, saveShift } = useGoogleSheets();
+  const { saveTransaction } = useGoogleSheets();
   const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts('DMX');
   const { currentShift: casaShift } = useShifts('CASA'); // Get CASA shift for dispatcher info
   const { toast } = useToast();
@@ -107,26 +107,6 @@ export const DispatcherPanelDmx = () => {
     });
   };
 
-  const handleEndShift = async () => {
-    if (!currentShift) return;
-
-    const endTime = new Date().toISOString();
-
-    // Actualizează tura cu timpul de încheiere
-    await updateShift(currentShift.id, { endTime });
-
-    // Salvează și în Google Sheets (backup)
-    const completedShift = {
-      ...currentShift,
-      endTime,
-    };
-    await saveShift(completedShift);
-
-    toast({
-      title: "Tură încheiată",
-      description: `Sold final: ${currentShift.finalBalance.toFixed(2)} lei`,
-    });
-  };
 
   return (
     <div className="space-y-6">
@@ -226,13 +206,6 @@ export const DispatcherPanelDmx = () => {
               </div>
             </div>
           </Card>
-
-          {/* Butoane acțiuni */}
-          <div className="flex gap-3">
-            <Button onClick={handleEndShift} variant="secondary" className="flex-1">
-              Încheie Tura
-            </Button>
-          </div>
 
           {/* Sold curent */}
           <Card className="p-6 bg-primary text-primary-foreground">
