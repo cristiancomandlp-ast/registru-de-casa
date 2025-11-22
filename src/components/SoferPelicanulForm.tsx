@@ -73,25 +73,23 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="indicativ_alocat">Indicativ *</Label>
+          <Label htmlFor="indicativ_alocat">Indicativ</Label>
           <Input
             id="indicativ_alocat"
             value={formData.indicativ_alocat}
             onChange={(e) => handleChange('indicativ_alocat', e.target.value)}
-            required
           />
         </div>
         <div>
-          <Label htmlFor="numar_auto">Număr Înmatriculare *</Label>
+          <Label htmlFor="numar_auto">Număr Înmatriculare</Label>
           <Input
             id="numar_auto"
             value={formData.numar_auto}
             onChange={(e) => handleChange('numar_auto', e.target.value)}
-            required
           />
         </div>
         <div>
-          <Label htmlFor="status">Status *</Label>
+          <Label htmlFor="status">Status</Label>
           <Select
             value={formData.status}
             onValueChange={(value) => handleChange('status', value)}
@@ -106,48 +104,43 @@ const SoferPelicanulForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulFormPro
           </Select>
         </div>
         <div>
-          <Label htmlFor="denumire_societate">Firmă *</Label>
+          <Label htmlFor="denumire_societate">Firmă</Label>
           <Input
             id="denumire_societate"
             value={formData.denumire_societate}
             onChange={(e) => handleChange('denumire_societate', e.target.value)}
-            required
           />
         </div>
         <div>
-          <Label htmlFor="administrator">Administrator *</Label>
+          <Label htmlFor="administrator">Administrator</Label>
           <Input
             id="administrator"
             value={formData.administrator}
             onChange={(e) => handleChange('administrator', e.target.value)}
-            required
           />
         </div>
         <div>
-          <Label htmlFor="telefon_administrator">Telefon Administrator *</Label>
+          <Label htmlFor="telefon_administrator">Telefon Administrator</Label>
           <Input
             id="telefon_administrator"
             value={formData.telefon_administrator}
             onChange={(e) => handleChange('telefon_administrator', e.target.value)}
-            required
           />
         </div>
         <div>
-          <Label htmlFor="nume_sofer">Nume Șofer *</Label>
+          <Label htmlFor="nume_sofer">Nume Șofer</Label>
           <Input
             id="nume_sofer"
             value={formData.nume_sofer}
             onChange={(e) => handleChange('nume_sofer', e.target.value)}
-            required
           />
         </div>
         <div>
-          <Label htmlFor="telefon_sofer">Telefon Șofer *</Label>
+          <Label htmlFor="telefon_sofer">Telefon Șofer</Label>
           <Input
             id="telefon_sofer"
             value={formData.telefon_sofer}
             onChange={(e) => handleChange('telefon_sofer', e.target.value)}
-            required
           />
         </div>
       </div>
