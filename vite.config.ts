@@ -10,10 +10,10 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
     'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(
-      env.VITE_SUPABASE_URL || 'https://zwuvgidvyofsoeuzrmkm.supabase.co',
+      env.VITE_SUPABASE_URL || 'https://zfacsflgjdfuecothkum.supabase.co',
     ),
     'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
-      env.VITE_SUPABASE_PUBLISHABLE_KEY || env.JWT,
+      env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_lMtgTBvL_FO4k4xHeKOJXw_mTg1L1tH',
     ),
     'import.meta.env.JWT': JSON.stringify(env.JWT),
   },
