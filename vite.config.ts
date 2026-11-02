@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-  define: {
+    define: {
     'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(
       env.VITE_SUPABASE_URL || 'https://zwuvgidvyofsoeuzrmkm.supabase.co',
     ),
@@ -17,15 +17,15 @@ export default defineConfig(({ mode }) => {
     ),
     'import.meta.env.JWT': JSON.stringify(env.JWT),
   },
-  server: {
-    host: "::",
-    port: 8080,
-  },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+    server: {
+      host: "::",
+      port: 8080,
     },
-  },
+    plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
   };
 });
