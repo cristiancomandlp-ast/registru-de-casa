@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { isSupabaseConfigured, supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +23,8 @@ const Auth = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    if (!supabase) return;
+
     // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
@@ -36,6 +38,10 @@ const Auth = () => {
     e.preventDefault();
 
     try {
+      if (!isSupabaseConfigured || !supabase) {
+        throw new Error('Serviciul de autentificare nu este configurat în această aplicație.');
+      }
+
       const validated = authSchema.parse({ email, password });
       setLoading(true);
 
@@ -103,7 +109,12 @@ const Auth = () => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            {!isSupabaseConfigured && (
+              <p className="text-sm text-center text-amber-700 bg-amber-50 border border-amber-200 rounded-md p-3">
+                Autentificarea nu este disponibilă: lipsesc setările Supabase.
+              </p>
+            )}
+            <Button type="submit" className="w-full" disabled={loading || !isSupabaseConfigured}>
               {loading ? 'Se autentifică...' : 'Autentificare'}
             </Button>
           </form>
