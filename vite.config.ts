@@ -6,20 +6,21 @@ import { componentTagger } from "lovable-tagger";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL || env.SUPABASE_URL || 'https://zfacsflgjdfuecothkum.supabase.co';
+  const supabaseKey = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_lMtgTBvL_FO4k4xHeKOJXw_mTg1L1tH';
 
   return {
     define: {
-    'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(
-      env.VITE_SUPABASE_URL || 'https://zfacsflgjdfuecothkum.supabase.co',
-    ),
-    'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(
-      env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_lMtgTBvL_FO4k4xHeKOJXw_mTg1L1tH',
-    ),
-    'import.meta.env.JWT': JSON.stringify(env.JWT),
-  },
+      'import.meta.env.NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(supabaseUrl),
+      'import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(supabaseKey),
+      'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
+      'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(supabaseKey),
+      'import.meta.env.JWT': JSON.stringify(env.JWT),
+    },
     server: {
       host: "::",
       port: 8080,
+      allowedHosts: true,
     },
     plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
     resolve: {
