@@ -3,10 +3,18 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useAdmin } from '@/hooks/useAdmin';
+import { useDispatchers } from '@/hooks/useDispatchers';
+import { Trash2, Pencil, Plus } from 'lucide-react';
 
 export const Settings = () => {
   const [sheetUrl, setSheetUrl] = useState("");
   const { toast } = useToast();
+  const { isAdmin } = useAdmin();
+  const { dispatchers, addDispatcher, updateDispatcher, deleteDispatcher } = useDispatchers();
+  const [newDispatcher, setNewDispatcher] = useState('');
+  const [editingDispatcher, setEditingDispatcher] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState('');
 
   useEffect(() => {
     const savedUrl = localStorage.getItem('GOOGLE_SHEET_URL');
@@ -35,6 +43,36 @@ export const Settings = () => {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Setări</h2>
+
+      {isAdmin && (
+        <Card className="p-6 border-2 border-black">
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold">Gestionare dispeceri</h3>
+              <p className="text-sm text-muted-foreground">Doar administratorul poate adăuga, modifica sau șterge dispeceri.</p>
+            </div>
+            <div className="flex gap-2">
+              <Input value={newDispatcher} onChange={(event) => setNewDispatcher(event.target.value)} placeholder="Nume dispecer" />
+              <Button onClick={async () => { if (await addDispatcher(newDispatcher)) setNewDispatcher(''); }} aria-label="Adaugă dispecer"><Plus className="h-4 w-4" /></Button>
+            </div>
+            <div className="space-y-2">
+              {dispatchers.map((dispatcher) => (
+                <div key={dispatcher} className="flex items-center gap-2 rounded border p-2">
+                  {editingDispatcher === dispatcher ? (
+                    <Input value={editingName} onChange={(event) => setEditingName(event.target.value)} autoFocus />
+                  ) : <span className="flex-1">{dispatcher}</span>}
+                  {editingDispatcher === dispatcher ? (
+                    <Button size="sm" onClick={async () => { if (await updateDispatcher(dispatcher, editingName)) setEditingDispatcher(null); }}>Salvează</Button>
+                  ) : (
+                    <Button size="icon" variant="outline" onClick={() => { setEditingDispatcher(dispatcher); setEditingName(dispatcher); }} aria-label={`Editează ${dispatcher}`}><Pencil className="h-4 w-4" /></Button>
+                  )}
+                  <Button size="icon" variant="destructive" onClick={() => deleteDispatcher(dispatcher)} aria-label={`Șterge ${dispatcher}`}><Trash2 className="h-4 w-4" /></Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+      )}
 
       <Card className="p-6">
         <div className="space-y-4">

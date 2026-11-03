@@ -5,10 +5,9 @@ import { LoanPanel } from '@/components/LoanPanel';
 import { Settings } from '@/components/Settings';
 import { Pontaj } from '@/components/Pontaj';
 import { Necesar } from '@/components/Necesar';
-import { DrinkOk } from '@/components/DrinkOk';
 import BazaDeDate from '@/components/BazaDeDate';
 import { ChatIntern } from '@/components/ChatIntern';
-import { Settings as SettingsIcon, LogOut, FileText, BarChart3, Wallet, Users, Package, ClipboardCheck, Database, MessageSquare } from 'lucide-react';
+import { Settings as SettingsIcon, LogOut, FileText, BarChart3, Wallet, Users, Package, Database, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
@@ -17,7 +16,7 @@ import { useAdmin } from '@/hooks/useAdmin';
 import pelicanulLogo from '@/assets/pelicanul-logo.jpg';
 import { Reclamatii } from '@/components/Reclamatii';
 
-type ViewType = 'registru' | 'registru-dmx' | 'drink-ok' | 'sold-mihai' | 'reclamatii' | 'baza-date' | 'chat-intern' | 'necesar' | 'pontaj';
+type ViewType = 'registru' | 'registru-dmx' | 'sold-mihai' | 'reclamatii' | 'baza-date' | 'chat-intern' | 'necesar' | 'pontaj';
 
 const Dashboard = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -29,7 +28,6 @@ const Dashboard = () => {
   const navigationCards = [
     { id: 'registru' as ViewType, label: 'REGISTRU DE CASĂ', icon: FileText, color: 'bg-black hover:bg-gray-800' },
     { id: 'registru-dmx' as ViewType, label: 'REGISTRU DE CASĂ DMX', icon: FileText, color: 'bg-purple-600 hover:bg-purple-700' },
-    { id: 'drink-ok' as ViewType, label: 'DRINK OK', icon: ClipboardCheck, color: 'bg-emerald-600 hover:bg-emerald-700' },
     { id: 'sold-mihai' as ViewType, label: 'SOLD MIHAI', icon: Wallet, color: 'bg-amber-600 hover:bg-amber-700' },
     { id: 'reclamatii' as ViewType, label: 'RECLAMAȚII', icon: BarChart3, color: 'bg-red-600 hover:bg-red-700' },
     { id: 'baza-date' as ViewType, label: 'BAZĂ DE DATE', icon: Database, color: 'bg-blue-600 hover:bg-blue-700' },
@@ -44,8 +42,6 @@ const Dashboard = () => {
         return <DispatcherPanel onBack={() => setActiveView(null)} />;
       case 'registru-dmx':
         return <DispatcherPanelDmx />;
-      case 'drink-ok':
-        return <DrinkOk onBack={() => setActiveView(null)} />;
       case 'sold-mihai':
         return <LoanPanel />;
       case 'reclamatii':
@@ -134,6 +130,17 @@ const Dashboard = () => {
                 </Card>
               );
             })}
+            {isAdmin && (
+              <Card
+                className="bg-black hover:bg-gray-800 border-2 border-black cursor-pointer transition-all duration-200 active:scale-95"
+                onClick={() => setShowSettings(true)}
+              >
+                <div className="flex items-center justify-center gap-2 md:gap-3 py-6 md:py-8 px-4 md:px-6">
+                  <SettingsIcon className="h-5 w-5 md:h-6 md:w-6 text-white" />
+                  <span className="text-white font-bold text-base md:text-lg tracking-wide">SETĂRI</span>
+                </div>
+              </Card>
+            )}
           </div>
         )}
       </div>
