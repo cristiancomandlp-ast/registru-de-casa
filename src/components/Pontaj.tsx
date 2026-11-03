@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdmin } from '@/hooks/useAdmin';
 import { useToast } from '@/hooks/use-toast';
+import { useDispatchers } from '@/hooks/useDispatchers';
 import { DispatcherName } from '@/types/dispatcher';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -20,6 +21,7 @@ interface PontajEntry {
 export const Pontaj = () => {
   const { isAdmin, loading: adminLoading } = useAdmin();
   const { toast } = useToast();
+  const { dispatchers } = useDispatchers();
   const [pontaje, setPontaje] = useState<PontajEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -30,8 +32,6 @@ export const Pontaj = () => {
     'Antigona': '#f59e0b',
     'Memeta': '#8b5cf6'
   });
-
-  const dispatchers: DispatcherName[] = ['Luiza', 'Laura', 'Rely', 'Antigona', 'Memeta'];
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -194,13 +194,9 @@ export const Pontaj = () => {
   };
 
   const calculateShiftStats = () => {
-    const stats: Record<DispatcherName, { zi: number; noapte: number }> = {
-      'Luiza': { zi: 0, noapte: 0 },
-      'Laura': { zi: 0, noapte: 0 },
-      'Rely': { zi: 0, noapte: 0 },
-      'Antigona': { zi: 0, noapte: 0 },
-      'Memeta': { zi: 0, noapte: 0 }
-    };
+    const stats: Record<DispatcherName, { zi: number; noapte: number }> = Object.fromEntries(
+      dispatchers.map((dispatcher) => [dispatcher, { zi: 0, noapte: 0 }]),
+    );
 
     pontaje.forEach(pontaj => {
       if (pontaj.tura_zi && pontaj.tura_zi !== 'none') {
