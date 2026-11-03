@@ -9,8 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { DispatcherName, Transaction, Shift } from '@/types/dispatcher';
 import { History } from '@/components/History';
 import { ReportsDb } from '@/components/ReportsDb';
-
-const dispatchers: DispatcherName[] = ["Luiza", "Laura", "Rely", "Antigona", "Memeta"];
+import { useDispatchers } from '@/hooks/useDispatchers';
 
 interface DispatcherPanelProps {
   onBack?: () => void;
@@ -20,6 +19,7 @@ export const DispatcherPanel = ({ onBack }: DispatcherPanelProps) => {
   const { saveTransaction, saveShift } = useGoogleSheets();
   const { currentShift, history, createShift, updateShift, addTransaction: addTransactionToDb } = useShifts('CASA');
   const { toast } = useToast();
+  const { dispatchers } = useDispatchers();
 
   const [selectedDispatcher, setSelectedDispatcher] = useState<DispatcherName | "">("");
   const [intrareAmount, setIntrareAmount] = useState("");

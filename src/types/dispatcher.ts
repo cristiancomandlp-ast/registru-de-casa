@@ -1,4 +1,4 @@
-export type DispatcherName = "Luiza" | "Laura" | "Rely" | "Antigona" | "Memeta";
+export type DispatcherName = string;
 
 export interface Transaction {
   id: string;
