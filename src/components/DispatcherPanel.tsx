@@ -183,8 +183,8 @@ export const DispatcherPanel = ({ onBack }: DispatcherPanelProps) => {
               </SelectTrigger>
               <SelectContent>
                 {dispatchers.map((dispatcher) => (
-                  <SelectItem key={dispatcher} value={dispatcher}>
-                    {dispatcher}
+                  <SelectItem key={dispatcher.name} value={dispatcher.name}>
+                    {dispatcher.name}
                   </SelectItem>
                 ))}
               </SelectContent>
