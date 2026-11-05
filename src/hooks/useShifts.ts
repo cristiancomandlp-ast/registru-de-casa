@@ -52,7 +52,6 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
           *,
           transactions (*)
         `)
-        .eq('register_type', registerType)
         .order('start_time', { ascending: false });
 
       if (shiftsError) throw shiftsError;
@@ -100,7 +99,6 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
           start_time: shift.startTime,
           initial_balance: shift.initialBalance,
           final_balance: shift.finalBalance,
-          register_type: registerType,
         });
 
       if (error) throw error;
@@ -141,7 +139,6 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
           description: transaction.description,
           timestamp: transaction.timestamp,
           dispatcher: transaction.dispatcher,
-          register_type: registerType,
         });
 
       if (error) throw error;
