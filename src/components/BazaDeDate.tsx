@@ -453,33 +453,39 @@ const BazaDeDate = () => {
                     </div>
 
                     {isAdmin && (
-                      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 rounded-md border bg-muted/30 p-3">
-                        <label className="flex items-center gap-2 text-sm font-medium">
-                          <input
-                            type="checkbox"
-                            checked={Boolean(sofer.plati_lunare?.[paymentMonth]?.platit)}
-                            onChange={(event) => updateAstPayment(sofer, event.target.checked)}
-                            className="h-4 w-4"
-                          />
-                          Plătit pentru {paymentMonth}
-                        </label>
-                        <div className="text-sm">
-                          <span className="font-semibold">Data plății: </span>
-                          {sofer.plati_lunare?.[paymentMonth]?.data || 'neînregistrată'}
+                      <div className="mt-4 rounded-md border bg-slate-50 p-3">
+                        <div className="mb-3 flex items-center justify-between gap-2">
+                          <h3 className="font-semibold text-slate-700">Istoric Plăți</h3>
+                          <Button size="sm" className="bg-lime-100 text-slate-900 hover:bg-lime-200" onClick={() => updateAstPayment(sofer, true)}>
+                            Adaugă Plată
+                          </Button>
                         </div>
-                        <label className="flex items-center gap-2 text-sm font-medium">
-                          Status:
-                          <select value={sofer.status || 'ACTIV'} onChange={(event) => updateAstStatus(sofer, event.target.value)} className="rounded border bg-background px-2 py-1">
-                            <option value="ACTIV">Activ</option>
-                            <option value="DECOLANTAT">Decolantat</option>
-                          </select>
-                        </label>
-                        {sofer.status === 'DECOLANTAT' && (
-                          <label className="text-sm font-medium md:col-span-3">
-                            Data decolantării:
-                            <Input type="date" value={sofer.data_decolantare || ''} onChange={(event) => updateSoferAst.mutate({ id: sofer.id, data_decolantare: event.target.value })} className="mt-1 max-w-xs" />
+                        <div className="flex flex-wrap gap-2">
+                          {['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Noi', 'Dec'].map((monthName, index) => {
+                            const monthKey = `${paymentYear}-${String(index + 1).padStart(2, '0')}`;
+                            const payment = sofer.plati_lunare?.[monthKey];
+                            const paid = Boolean(payment?.platit);
+                            return <button type="button" key={monthKey} onClick={() => { setPaymentMonth(monthKey); updateAstPayment(sofer, !paid, monthKey); }} className={`rounded-md px-3 py-2 text-sm font-semibold text-white ${paid ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`} title={payment?.data ? `Plătit la ${payment.data}` : 'Neachitat'}>
+                              {monthName}
+                            </button>;
+                          })}
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-4 text-sm text-slate-600">
+                          <span><i className="mr-1 inline-block h-3 w-3 rounded bg-green-500" />Achitat</span>
+                          <span><i className="mr-1 inline-block h-3 w-3 rounded bg-red-500" />Neachitat</span>
+                          <span>Data: {sofer.plati_lunare?.[paymentMonth]?.data || 'neînregistrată'}</span>
+                        </div>
+                        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
+                          <label className="text-sm font-medium">Status
+                            <select value={sofer.status || 'ACTIV'} onChange={(event) => updateAstStatus(sofer, event.target.value)} className="mt-1 block w-full rounded border bg-background px-2 py-1">
+                              <option value="ACTIV">Activ</option>
+                              <option value="DECOLANTAT">Decolantat</option>
+                            </select>
                           </label>
-                        )}
+                          {sofer.status === 'DECOLANTAT' && <label className="text-sm font-medium">Data decolantării
+                            <Input type="date" value={sofer.data_decolantare || ''} onChange={(event) => updateSoferAst.mutate({ id: sofer.id, data_decolantare: event.target.value })} className="mt-1" />
+                          </label>}
+                        </div>
                       </div>
                     )}
 
