@@ -21,17 +21,12 @@ interface PontajEntry {
 export const Pontaj = () => {
   const { isAdmin, loading: adminLoading } = useAdmin();
   const { toast } = useToast();
-  const { dispatchers } = useDispatchers();
+  const { dispatchers: dispatcherRecords, updateDispatcherColor } = useDispatchers();
+  const dispatchers = dispatcherRecords.map((dispatcher) => dispatcher.name);
   const [pontaje, setPontaje] = useState<PontajEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [dispatcherColors, setDispatcherColors] = useState<Record<DispatcherName, string>>({
-    'Luiza': '#3b82f6',
-    'Laura': '#ec4899',
-    'Rely': '#10b981',
-    'Antigona': '#f59e0b',
-    'Memeta': '#8b5cf6'
-  });
+  const dispatcherColors = Object.fromEntries(dispatcherRecords.map((dispatcher) => [dispatcher.name, dispatcher.color])) as Record<DispatcherName, string>;
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -185,13 +180,6 @@ export const Pontaj = () => {
   ];
 
   const weekDays = ['Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum'];
-
-  const handleColorChange = (dispatcher: DispatcherName, color: string) => {
-    setDispatcherColors(prev => ({
-      ...prev,
-      [dispatcher]: color
-    }));
-  };
 
   const calculateShiftStats = () => {
     const stats: Record<DispatcherName, { zi: number; noapte: number }> = Object.fromEntries(
@@ -457,7 +445,7 @@ export const Pontaj = () => {
                   <Input
                     type="color"
                     value={dispatcherColors[dispatcher]}
-                    onChange={(e) => handleColorChange(dispatcher, e.target.value)}
+                    onChange={(e) => void updateDispatcherColor(dispatcher, e.target.value)}
                     className="w-12 h-9 p-1 cursor-pointer"
                   />
                 )}

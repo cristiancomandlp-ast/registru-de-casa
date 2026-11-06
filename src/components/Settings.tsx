@@ -7,12 +7,17 @@ import { useAdmin } from '@/hooks/useAdmin';
 import { useDispatchers } from '@/hooks/useDispatchers';
 import { Trash2, Pencil, Plus } from 'lucide-react';
 
-export const Settings = () => {
+interface SettingsProps {
+  onBack?: () => void;
+}
+
+export const Settings = ({ onBack }: SettingsProps) => {
   const [sheetUrl, setSheetUrl] = useState("");
   const { toast } = useToast();
   const { isAdmin } = useAdmin();
-  const { dispatchers, addDispatcher, updateDispatcher, deleteDispatcher } = useDispatchers();
+  const { dispatchers, addDispatcher, updateDispatcher, updateDispatcherColor, deleteDispatcher } = useDispatchers();
   const [newDispatcher, setNewDispatcher] = useState('');
+  const [newColor, setNewColor] = useState('#3b82f6');
   const [editingDispatcher, setEditingDispatcher] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
 
@@ -42,7 +47,10 @@ export const Settings = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Setări</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-2xl font-bold">Setări</h2>
+        {onBack && <Button variant="outline" onClick={onBack}>← Înapoi</Button>}
+      </div>
 
       {isAdmin && (
         <Card className="p-6 border-2 border-black">
@@ -53,20 +61,22 @@ export const Settings = () => {
             </div>
             <div className="flex gap-2">
               <Input value={newDispatcher} onChange={(event) => setNewDispatcher(event.target.value)} placeholder="Nume dispecer" />
-              <Button onClick={async () => { if (await addDispatcher(newDispatcher)) setNewDispatcher(''); }} aria-label="Adaugă dispecer"><Plus className="h-4 w-4" /></Button>
+              <Input type="color" value={newColor} onChange={(event) => setNewColor(event.target.value)} className="w-14 p-1" aria-label="Culoare dispecer nou" />
+              <Button onClick={async () => { if (await addDispatcher(newDispatcher, newColor)) setNewDispatcher(''); }} aria-label="Adaugă dispecer"><Plus className="h-4 w-4" /></Button>
             </div>
             <div className="space-y-2">
               {dispatchers.map((dispatcher) => (
-                <div key={dispatcher} className="flex items-center gap-2 rounded border p-2">
-                  {editingDispatcher === dispatcher ? (
+                <div key={dispatcher.name} className="flex items-center gap-2 rounded border p-2">
+                  <Input type="color" value={dispatcher.color} onChange={(event) => updateDispatcherColor(dispatcher.name, event.target.value)} className="w-12 p-1" aria-label={`Culoare ${dispatcher.name}`} />
+                  {editingDispatcher === dispatcher.name ? (
                     <Input value={editingName} onChange={(event) => setEditingName(event.target.value)} autoFocus />
-                  ) : <span className="flex-1">{dispatcher}</span>}
-                  {editingDispatcher === dispatcher ? (
-                    <Button size="sm" onClick={async () => { if (await updateDispatcher(dispatcher, editingName)) setEditingDispatcher(null); }}>Salvează</Button>
+                  ) : <span className="flex-1">{dispatcher.name}</span>}
+                  {editingDispatcher === dispatcher.name ? (
+                    <Button size="sm" onClick={async () => { if (await updateDispatcher(dispatcher.name, editingName, dispatcher.color)) setEditingDispatcher(null); }}>Salvează</Button>
                   ) : (
-                    <Button size="icon" variant="outline" onClick={() => { setEditingDispatcher(dispatcher); setEditingName(dispatcher); }} aria-label={`Editează ${dispatcher}`}><Pencil className="h-4 w-4" /></Button>
+                    <Button size="icon" variant="outline" onClick={() => { setEditingDispatcher(dispatcher.name); setEditingName(dispatcher.name); }} aria-label={`Editează ${dispatcher.name}`}><Pencil className="h-4 w-4" /></Button>
                   )}
-                  <Button size="icon" variant="destructive" onClick={() => deleteDispatcher(dispatcher)} aria-label={`Șterge ${dispatcher}`}><Trash2 className="h-4 w-4" /></Button>
+                  <Button size="icon" variant="destructive" onClick={() => deleteDispatcher(dispatcher.name)} aria-label={`Șterge ${dispatcher.name}`}><Trash2 className="h-4 w-4" /></Button>
                 </div>
               ))}
             </div>

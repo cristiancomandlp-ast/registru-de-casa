@@ -100,7 +100,7 @@ const Dashboard = () => {
         </div>
 
         {showSettings ? (
-          <Settings />
+          <Settings onBack={() => setShowSettings(false)} />
         ) : activeView ? (
           <div className="mt-4">
             <Button

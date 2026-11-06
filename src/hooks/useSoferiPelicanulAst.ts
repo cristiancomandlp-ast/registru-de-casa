@@ -24,6 +24,9 @@ export type SoferPelicanulAst = {
   telefon_sofer: string;
   created_at: string;
   updated_at: string;
+  status?: string;
+  data_decolantare?: string | null;
+  plati_lunare?: Record<string, { platit: boolean; gratuit?: boolean; data: string | null }>;
 };
 
 export const useSoferiPelicanulAst = () => {
