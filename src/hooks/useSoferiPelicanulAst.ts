@@ -26,7 +26,7 @@ export type SoferPelicanulAst = {
   updated_at: string;
   status?: string;
   data_decolantare?: string | null;
-  plati_lunare?: Record<string, { platit: boolean; data: string | null }>;
+  plati_lunare?: Record<string, { platit: boolean; gratuit?: boolean; data: string | null }>;
 };
 
 export const useSoferiPelicanulAst = () => {

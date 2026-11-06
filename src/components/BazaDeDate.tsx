@@ -41,9 +41,9 @@ const BazaDeDate = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
 
-  const updateAstPayment = (sofer: SoferPelicanulAst, paid: boolean, month = paymentMonth) => {
+  const updateAstPayment = (sofer: SoferPelicanulAst, paid: boolean, month = paymentMonth, gratuit = false) => {
     const payments = { ...(sofer.plati_lunare || {}) };
-    payments[month] = { platit: paid, data: paid ? paymentDate : null };
+    payments[month] = { platit: paid, gratuit, data: paid || gratuit ? paymentDate : null };
     updateSoferAst.mutate({ id: sofer.id, plati_lunare: payments });
   };
 
@@ -465,7 +465,9 @@ const BazaDeDate = () => {
                             const monthKey = `${paymentYear}-${String(index + 1).padStart(2, '0')}`;
                             const payment = sofer.plati_lunare?.[monthKey];
                             const paid = Boolean(payment?.platit);
-                            return <button type="button" key={monthKey} onClick={() => { setPaymentMonth(monthKey); updateAstPayment(sofer, !paid, monthKey); }} className={`rounded-md px-3 py-2 text-sm font-semibold text-white ${paid ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`} title={payment?.data ? `Plătit la ${payment.data}` : 'Neachitat'}>
+                            const gratuit = Boolean(payment?.gratuit);
+                            const nextStatus = gratuit ? { paid: false, gratuit: false } : paid ? { paid: false, gratuit: true } : { paid: true, gratuit: false };
+                            return <button type="button" key={monthKey} onClick={() => { setPaymentMonth(monthKey); updateAstPayment(sofer, nextStatus.paid, monthKey, nextStatus.gratuit); }} className={`rounded-md px-3 py-2 text-sm font-semibold text-white ${gratuit ? 'bg-slate-400 hover:bg-slate-500' : paid ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'}`} title={gratuit ? 'Lună gratuită' : paid ? `Plătit la ${payment?.data || 'data nespecificată'}` : 'Neachitat'}>
                               {monthName}
                             </button>;
                           })}
@@ -473,8 +475,17 @@ const BazaDeDate = () => {
                         <div className="mt-3 flex flex-wrap gap-4 text-sm text-slate-600">
                           <span><i className="mr-1 inline-block h-3 w-3 rounded bg-green-500" />Achitat</span>
                           <span><i className="mr-1 inline-block h-3 w-3 rounded bg-red-500" />Neachitat</span>
+                          <span><i className="mr-1 inline-block h-3 w-3 rounded bg-slate-400" />Gratuit</span>
                           <span>Data: {sofer.plati_lunare?.[paymentMonth]?.data || 'neînregistrată'}</span>
                         </div>
+                        {Object.entries(sofer.plati_lunare || {}).filter(([, payment]) => payment.gratuit).length > 0 && (
+                          <div className="mt-3 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+                            <p className="font-semibold">Luni Gratuite (Promoție)</p>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              {Object.entries(sofer.plati_lunare || {}).filter(([, payment]) => payment.gratuit).map(([month]) => <span key={month} className="rounded bg-green-100 px-2 py-1">{month}</span>)}
+                            </div>
+                          </div>
+                        )}
                         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
                           <label className="text-sm font-medium">Status
                             <select value={sofer.status || 'ACTIV'} onChange={(event) => updateAstStatus(sofer, event.target.value)} className="mt-1 block w-full rounded border bg-background px-2 py-1">
