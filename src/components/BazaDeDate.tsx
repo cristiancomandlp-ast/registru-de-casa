@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { format } from 'date-fns';
 import { Card } from '@/components/ui/card';
 import { Users, Phone, Edit, Trash2, Upload, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -28,12 +29,28 @@ const BazaDeDate = () => {
   const [editingSofer, setEditingSofer] = useState<SoferPelicanul | null>(null);
   const [deletingSoferId, setDeletingSoferId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [paymentMonth, setPaymentMonth] = useState(format(new Date(), 'yyyy-MM'));
+  const [paymentDate, setPaymentDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const { soferi: soferiAst, isLoading: isLoadingAst, addSofer: addSoferAst, updateSofer: updateSoferAst, deleteSofer: deleteSoferAst } = useSoferiPelicanulAst();
   const { soferi, isLoading, addSofer, updateSofer, deleteSofer } = useSoferiPelicanul();
   const { isAdmin } = useAdmin();
 
   const handlePhoneCall = (phoneNumber: string) => {
     window.location.href = `tel:${phoneNumber}`;
+  };
+
+  const updateAstPayment = (sofer: SoferPelicanulAst, paid: boolean) => {
+    const payments = { ...(sofer.plati_lunare || {}) };
+    payments[paymentMonth] = { platit: paid, data: paid ? paymentDate : null };
+    updateSoferAst.mutate({ id: sofer.id, plati_lunare: payments });
+  };
+
+  const updateAstStatus = (sofer: SoferPelicanulAst, status: string) => {
+    updateSoferAst.mutate({
+      id: sofer.id,
+      status,
+      data_decolantare: status === 'DECOLANTAT' ? (sofer.data_decolantare || format(new Date(), 'yyyy-MM-dd')) : null,
+    });
   };
 
   if (activeSection === 'pelicanul') {
@@ -300,6 +317,12 @@ const BazaDeDate = () => {
           <Card className="p-4 md:p-6">
             <div className="mb-4 md:mb-6">
               <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">ȘOFERI PELICANUL AST</h2>
+              <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border bg-muted/30 p-3">
+                <span className="text-sm font-medium">Luna plății:</span>
+                <Input type="month" value={paymentMonth} onChange={(event) => setPaymentMonth(event.target.value)} className="w-auto" />
+                <span className="text-sm font-medium">Data plății:</span>
+                <Input type="date" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} className="w-auto" />
+              </div>
               
               {/* Search Bar */}
               <div className="relative mb-3 md:mb-4">
@@ -399,6 +422,37 @@ const BazaDeDate = () => {
                         <p className="font-medium">{sofer.localitate}</p>
                       </div>
                     </div>
+
+                    {isAdmin && (
+                      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 rounded-md border bg-muted/30 p-3">
+                        <label className="flex items-center gap-2 text-sm font-medium">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(sofer.plati_lunare?.[paymentMonth]?.platit)}
+                            onChange={(event) => updateAstPayment(sofer, event.target.checked)}
+                            className="h-4 w-4"
+                          />
+                          Plătit pentru {paymentMonth}
+                        </label>
+                        <div className="text-sm">
+                          <span className="font-semibold">Data plății: </span>
+                          {sofer.plati_lunare?.[paymentMonth]?.data || 'neînregistrată'}
+                        </div>
+                        <label className="flex items-center gap-2 text-sm font-medium">
+                          Status:
+                          <select value={sofer.status || 'ACTIV'} onChange={(event) => updateAstStatus(sofer, event.target.value)} className="rounded border bg-background px-2 py-1">
+                            <option value="ACTIV">Activ</option>
+                            <option value="DECOLANTAT">Decolantat</option>
+                          </select>
+                        </label>
+                        {sofer.status === 'DECOLANTAT' && (
+                          <label className="text-sm font-medium md:col-span-3">
+                            Data decolantării:
+                            <Input type="date" value={sofer.data_decolantare || ''} onChange={(event) => updateSoferAst.mutate({ id: sofer.id, data_decolantare: event.target.value })} className="mt-1 max-w-xs" />
+                          </label>
+                        )}
+                      </div>
+                    )}
 
                     {isAdmin && (
                       <div className="flex flex-col sm:flex-row gap-2 mt-4 pt-4 border-t">
