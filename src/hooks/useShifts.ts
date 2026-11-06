@@ -104,6 +104,17 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
         });
 
       if (error) throw error;
+
+      if (registerType === 'CASA') {
+        const { error: dmxError } = await supabase.from('shifts_dmx').insert({
+          id: `dmx_${shift.id}`,
+          dispatcher: shift.dispatcher,
+          start_time: shift.startTime,
+          initial_balance: 0,
+          final_balance: 0,
+        });
+        if (dmxError) throw dmxError;
+      }
     } catch (error) {
       console.error('Error creating shift:', error);
       throw error;
