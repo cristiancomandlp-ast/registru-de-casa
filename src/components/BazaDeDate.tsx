@@ -31,6 +31,8 @@ const BazaDeDate = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [paymentMonth, setPaymentMonth] = useState(format(new Date(), 'yyyy-MM'));
   const [paymentDate, setPaymentDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [selectedAstDriver, setSelectedAstDriver] = useState('');
+  const [paymentYear, setPaymentYear] = useState(new Date().getFullYear());
   const { soferi: soferiAst, isLoading: isLoadingAst, addSofer: addSoferAst, updateSofer: updateSoferAst, deleteSofer: deleteSoferAst } = useSoferiPelicanulAst();
   const { soferi, isLoading, addSofer, updateSofer, deleteSofer } = useSoferiPelicanul();
   const { isAdmin } = useAdmin();
@@ -323,6 +325,33 @@ const BazaDeDate = () => {
                 <span className="text-sm font-medium">Data plății:</span>
                 <Input type="date" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} className="w-auto" />
               </div>
+
+              {soferiAst && soferiAst.length > 0 && (
+                <div className="mb-4 rounded-md border p-3">
+                  <div className="mb-3 flex flex-wrap items-center gap-2">
+                    <span className="text-sm font-semibold">Istoric plăți lunare:</span>
+                    <select value={selectedAstDriver || soferiAst[0].id} onChange={(event) => setSelectedAstDriver(event.target.value)} className="rounded border bg-background px-2 py-1 text-sm">
+                      {soferiAst.map((driver) => <option key={driver.id} value={driver.id}>{driver.indicativ_alocat} - {driver.nume_sofer || driver.denumire_societate}</option>)}
+                    </select>
+                    <Input type="number" value={paymentYear} onChange={(event) => setPaymentYear(Number(event.target.value))} className="w-24" aria-label="An plăți" />
+                  </div>
+                  {(() => {
+                    const driver = soferiAst.find((item) => item.id === (selectedAstDriver || soferiAst[0].id));
+                    const monthNames = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
+                    return driver ? <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                      {monthNames.map((monthName, index) => {
+                        const monthKey = `${paymentYear}-${String(index + 1).padStart(2, '0')}`;
+                        const payment = driver.plati_lunare?.[monthKey];
+                        const paid = Boolean(payment?.platit);
+                        return <div key={monthKey} className={`rounded-md border p-2 text-center text-xs font-semibold ${paid ? 'border-green-600 bg-green-100 text-green-800' : 'border-red-600 bg-red-100 text-red-800'}`}>
+                          <div>{monthName}</div><div>{paid ? 'PLĂTIT' : 'NEPLĂTIT'}</div>
+                          {payment?.data && <div className="mt-1 font-normal">{payment.data}</div>}
+                        </div>;
+                      })}
+                    </div> : null;
+                  })()}
+                </div>
+              )}
               
               {/* Search Bar */}
               <div className="relative mb-3 md:mb-4">
