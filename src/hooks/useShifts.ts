@@ -6,6 +6,8 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
   const [currentShift, setCurrentShift] = useState<Shift | null>(null);
   const [history, setHistory] = useState<Shift[]>([]);
   const [loading, setLoading] = useState(true);
+  const shiftsTable = registerType === 'DMX' ? 'shifts_dmx' : 'shifts';
+  const transactionsTable = registerType === 'DMX' ? 'transactions_dmx' : 'transactions';
 
   // Încarcă tura curentă și istoricul
   useEffect(() => {
@@ -13,13 +15,13 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
 
     // Abonare la modificări în timp real
     const channel = supabase
-      .channel('shifts-channel')
+      .channel(`${registerType.toLowerCase()}-shifts-channel`)
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'shifts'
+          table: shiftsTable
         },
         () => {
           loadShifts();
@@ -30,7 +32,7 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
         {
           event: '*',
           schema: 'public',
-          table: 'transactions'
+          table: transactionsTable
         },
         () => {
           loadShifts();
@@ -47,10 +49,10 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
     try {
       // Încarcă toate turele cu tranzacțiile lor pentru registrul specificat
       const { data: shiftsData, error: shiftsError } = await (supabase as any)
-        .from('shifts')
+        .from(shiftsTable)
         .select(`
           *,
-          transactions (*)
+          ${transactionsTable} (*)
         `)
         .order('start_time', { ascending: false });
 
@@ -92,7 +94,7 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
   const createShift = async (shift: Shift) => {
     try {
       const { error } = await (supabase as any)
-        .from('shifts')
+        .from(shiftsTable)
         .insert({
           id: shift.id,
           dispatcher: shift.dispatcher,
@@ -116,7 +118,7 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
       if (updates.dispatcher !== undefined) dbUpdates.dispatcher = updates.dispatcher;
 
       const { error } = await (supabase as any)
-        .from('shifts')
+        .from(shiftsTable)
         .update(dbUpdates)
         .eq('id', shiftId);
 
@@ -130,7 +132,7 @@ export const useShifts = (registerType: 'CASA' | 'DMX' = 'CASA') => {
   const addTransaction = async (shiftId: string, transaction: any) => {
     try {
       const { error } = await (supabase as any)
-        .from('transactions')
+        .from(transactionsTable)
         .insert({
           id: transaction.id,
           shift_id: shiftId,
