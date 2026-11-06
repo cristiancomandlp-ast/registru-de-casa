@@ -41,9 +41,9 @@ const BazaDeDate = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
 
-  const updateAstPayment = (sofer: SoferPelicanulAst, paid: boolean) => {
+  const updateAstPayment = (sofer: SoferPelicanulAst, paid: boolean, month = paymentMonth) => {
     const payments = { ...(sofer.plati_lunare || {}) };
-    payments[paymentMonth] = { platit: paid, data: paid ? paymentDate : null };
+    payments[month] = { platit: paid, data: paid ? paymentDate : null };
     updateSoferAst.mutate({ id: sofer.id, plati_lunare: payments });
   };
 
@@ -343,10 +343,10 @@ const BazaDeDate = () => {
                         const monthKey = `${paymentYear}-${String(index + 1).padStart(2, '0')}`;
                         const payment = driver.plati_lunare?.[monthKey];
                         const paid = Boolean(payment?.platit);
-                        return <div key={monthKey} className={`rounded-md border p-2 text-center text-xs font-semibold ${paid ? 'border-green-600 bg-green-100 text-green-800' : 'border-red-600 bg-red-100 text-red-800'}`}>
+                        return <button type="button" key={monthKey} onClick={() => { setPaymentMonth(monthKey); updateAstPayment(driver, !paid, monthKey); }} className={`rounded-md border p-2 text-center text-xs font-semibold transition hover:brightness-95 ${paid ? 'border-green-600 bg-green-100 text-green-800' : 'border-red-600 bg-red-100 text-red-800'}`} title="Apasă pentru a schimba statusul plății">
                           <div>{monthName}</div><div>{paid ? 'PLĂTIT' : 'NEPLĂTIT'}</div>
                           {payment?.data && <div className="mt-1 font-normal">{payment.data}</div>}
-                        </div>;
+                        </button>;
                       })}
                     </div> : null;
                   })()}
