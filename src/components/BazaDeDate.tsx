@@ -23,6 +23,7 @@ import {
 
 const BazaDeDate = () => {
   const [activeSection, setActiveSection] = useState<'pelicanul' | 'pelicanul-ast' | null>(null);
+  const [driverFilter, setDriverFilter] = useState<'ACTIV' | 'INACTIV'>('ACTIV');
   const [showForm, setShowForm] = useState(false);
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [editingSoferAst, setEditingSoferAst] = useState<SoferPelicanulAst | null>(null);
@@ -93,7 +94,14 @@ const BazaDeDate = () => {
         ) : (
           <Card className="p-4 md:p-6">
             <div className="mb-4 md:mb-6">
-              <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">ȘOFERI PELICANUL</h2>
+              <div className="flex items-center justify-between gap-3 mb-3 md:mb-4">
+                <h2 className="text-xl md:text-2xl font-bold">ȘOFERI PELICANUL</h2>
+                <Button onClick={() => setShowForm(true)} className="bg-blue-600 hover:bg-blue-700">ADAUGĂ ȘOFER</Button>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                <Button onClick={() => setDriverFilter('ACTIV')} className="bg-green-500 hover:bg-green-600 text-white">ACTIVI ({soferi?.filter((item) => (item.status || 'ACTIV') === 'ACTIV').length || 0})</Button>
+                <Button onClick={() => setDriverFilter('INACTIV')} className="bg-red-500 hover:bg-red-600 text-white">INACTIVI ({soferi?.filter((item) => item.status === 'DECOLANTAT' || item.status === 'INACTIV').length || 0})</Button>
+              </div>
               
               {/* Search Bar */}
               <div className="relative mb-3 md:mb-4">
@@ -129,6 +137,7 @@ const BazaDeDate = () => {
             ) : soferi && soferi.length > 0 ? (
               <div className="space-y-4">
                 {soferi
+                  .filter((sofer) => (driverFilter === 'ACTIV' ? (sofer.status || 'ACTIV') === 'ACTIV' : sofer.status === 'DECOLANTAT' || sofer.status === 'INACTIV'))
                   .filter((sofer) => {
                     const query = searchQuery.toLowerCase();
                     return (
@@ -318,7 +327,14 @@ const BazaDeDate = () => {
         ) : (
           <Card className="p-4 md:p-6">
             <div className="mb-4 md:mb-6">
-              <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">ȘOFERI PELICANUL AST</h2>
+              <div className="flex items-center justify-between gap-3 mb-3 md:mb-4">
+                <h2 className="text-xl md:text-2xl font-bold">ȘOFERI PELICANUL AST</h2>
+                <Button onClick={() => setShowForm(true)} className="bg-blue-600 hover:bg-blue-700">ADAUGĂ</Button>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                <Button onClick={() => setDriverFilter('ACTIV')} className="bg-green-500 hover:bg-green-600 text-white">ACTIVI ({soferiAst?.filter((item) => (item.status || 'ACTIV') === 'ACTIV').length || 0})</Button>
+                <Button onClick={() => setDriverFilter('INACTIV')} className="bg-red-500 hover:bg-red-600 text-white">INACTIVI ({soferiAst?.filter((item) => item.status === 'DECOLANTAT' || item.status === 'INACTIV').length || 0})</Button>
+              </div>
               <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border bg-muted/30 p-3">
                 <span className="text-sm font-medium">Luna plății:</span>
                 <Input type="month" value={paymentMonth} onChange={(event) => setPaymentMonth(event.target.value)} className="w-auto" />
@@ -387,6 +403,7 @@ const BazaDeDate = () => {
             ) : soferiAst && soferiAst.length > 0 ? (
               <div className="space-y-4">
                 {soferiAst
+                  .filter((sofer) => (driverFilter === 'ACTIV' ? (sofer.status || 'ACTIV') === 'ACTIV' : sofer.status === 'DECOLANTAT' || sofer.status === 'INACTIV'))
                   .filter((sofer) => {
                     const query = searchQuery.toLowerCase();
                     return (
@@ -581,6 +598,7 @@ const BazaDeDate = () => {
             setEditingSofer(null);
             setEditingSoferAst(null);
             setSearchQuery('');
+            setDriverFilter('ACTIV');
           }}
           className="mb-4 bg-red-600 hover:bg-red-700 text-white border-2 border-black w-full sm:w-auto"
         >
