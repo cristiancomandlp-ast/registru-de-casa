@@ -32,7 +32,6 @@ const BazaDeDate = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [paymentMonth, setPaymentMonth] = useState(format(new Date(), 'yyyy-MM'));
   const [paymentDate, setPaymentDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-  const [selectedAstDriver, setSelectedAstDriver] = useState('');
   const [paymentYear, setPaymentYear] = useState(new Date().getFullYear());
   const { soferi: soferiAst, isLoading: isLoadingAst, addSofer: addSoferAst, updateSofer: updateSoferAst, deleteSofer: deleteSoferAst } = useSoferiPelicanulAst();
   const { soferi, isLoading, addSofer, updateSofer, deleteSofer } = useSoferiPelicanul();
@@ -335,39 +334,6 @@ const BazaDeDate = () => {
                 <Button onClick={() => setDriverFilter('ACTIV')} className="bg-green-500 hover:bg-green-600 text-white">ACTIVI ({soferiAst?.filter((item) => (item.status || 'ACTIV') === 'ACTIV').length || 0})</Button>
                 <Button onClick={() => setDriverFilter('INACTIV')} className="bg-red-500 hover:bg-red-600 text-white">INACTIVI ({soferiAst?.filter((item) => item.status === 'DECOLANTAT' || item.status === 'INACTIV').length || 0})</Button>
               </div>
-              <div className="mb-3 flex flex-wrap items-center gap-2 rounded-md border bg-muted/30 p-3">
-                <span className="text-sm font-medium">Luna plății:</span>
-                <Input type="month" value={paymentMonth} onChange={(event) => setPaymentMonth(event.target.value)} className="w-auto" />
-                <span className="text-sm font-medium">Data plății:</span>
-                <Input type="date" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} className="w-auto" />
-              </div>
-
-              {soferiAst && soferiAst.length > 0 && (
-                <div className="mb-4 rounded-md border p-3">
-                  <div className="mb-3 flex flex-wrap items-center gap-2">
-                    <span className="text-sm font-semibold">Istoric plăți lunare:</span>
-                    <select value={selectedAstDriver || soferiAst[0].id} onChange={(event) => setSelectedAstDriver(event.target.value)} className="rounded border bg-background px-2 py-1 text-sm">
-                      {soferiAst.map((driver) => <option key={driver.id} value={driver.id}>{driver.indicativ_alocat} - {driver.nume_sofer || driver.denumire_societate}</option>)}
-                    </select>
-                    <Input type="number" value={paymentYear} onChange={(event) => setPaymentYear(Number(event.target.value))} className="w-24" aria-label="An plăți" />
-                  </div>
-                  {(() => {
-                    const driver = soferiAst.find((item) => item.id === (selectedAstDriver || soferiAst[0].id));
-                    const monthNames = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
-                    return driver ? <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                      {monthNames.map((monthName, index) => {
-                        const monthKey = `${paymentYear}-${String(index + 1).padStart(2, '0')}`;
-                        const payment = driver.plati_lunare?.[monthKey];
-                        const paid = Boolean(payment?.platit);
-                        return <button type="button" key={monthKey} onClick={() => { setPaymentMonth(monthKey); updateAstPayment(driver, !paid, monthKey); }} className={`rounded-md border p-2 text-center text-xs font-semibold transition hover:brightness-95 ${paid ? 'border-green-600 bg-green-100 text-green-800' : 'border-red-600 bg-red-100 text-red-800'}`} title="Apasă pentru a schimba statusul plății">
-                          <div>{monthName}</div><div>{paid ? 'PLĂTIT' : 'NEPLĂTIT'}</div>
-                          {payment?.data && <div className="mt-1 font-normal">{payment.data}</div>}
-                        </button>;
-                      })}
-                    </div> : null;
-                  })()}
-                </div>
-              )}
               
               {/* Search Bar */}
               <div className="relative mb-3 md:mb-4">
@@ -471,6 +437,12 @@ const BazaDeDate = () => {
 
                     {isAdmin && (
                       <div className="mt-4 rounded-md border bg-slate-50 p-3">
+                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-medium">Luna:</span>
+                          <Input type="month" value={paymentMonth} onChange={(event) => setPaymentMonth(event.target.value)} className="w-auto" />
+                          <span className="text-sm font-medium">Data plății:</span>
+                          <Input type="date" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} className="w-auto" />
+                        </div>
                         <div className="mb-3 flex items-center justify-between gap-2">
                           <h3 className="font-semibold text-slate-700">Istoric Plăți</h3>
                           <Button size="sm" className="bg-lime-100 text-slate-900 hover:bg-lime-200" onClick={() => updateAstPayment(sofer, true)}>
