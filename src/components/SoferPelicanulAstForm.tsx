@@ -29,6 +29,10 @@ const SoferPelicanulAstForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulAstF
     serie_sasiu: '',
     nume_sofer: '',
     telefon_sofer: '',
+    data_plata: '',
+    status_plata: 'NEACHITAT',
+    status: 'ACTIV',
+    data_decolantare: '',
   });
 
   useEffect(() => {
@@ -51,6 +55,10 @@ const SoferPelicanulAstForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulAstF
         serie_sasiu: sofer.serie_sasiu,
         nume_sofer: sofer.nume_sofer,
         telefon_sofer: sofer.telefon_sofer,
+        data_plata: sofer.data_plata || '',
+        status_plata: sofer.status_plata || 'NEACHITAT',
+        status: sofer.status || 'ACTIV',
+        data_decolantare: sofer.data_decolantare || '',
       });
     }
   }, [sofer]);
@@ -255,6 +263,28 @@ const SoferPelicanulAstForm = ({ sofer, onSubmit, onCancel }: SoferPelicanulAstF
             onChange={handleChange}
             required
           />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="data_plata">DATA PLATĂ</Label>
+          <Input id="data_plata" type="date" value={formData.data_plata} onChange={handleChange} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status_plata">STATUS PLATĂ</Label>
+          <select id="status_plata" value={formData.status_plata} onChange={handleChange} className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm">
+            <option value="ACHITAT">ACHITAT</option>
+            <option value="NEACHITAT">NEACHITAT</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">STATUS ȘOFER</Label>
+          <select id="status" value={formData.status} onChange={handleChange} className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm">
+            <option value="ACTIV">ACTIV</option>
+            <option value="DECOLANTAT">DECOLANTAT</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="data_decolantare">DATA DECOLANTARE</Label>
+          <Input id="data_decolantare" type="date" value={formData.data_decolantare} onChange={handleChange} />
         </div>
       </div>
 
